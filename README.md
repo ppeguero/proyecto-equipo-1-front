@@ -14,6 +14,8 @@ operatividad interna como la experiencia del cliente.
 | ---------------------------- | ------------------------ | --------------------------- |
 | Frida Paulina Peguero Tejero | 22393146@utcancun.edu.mx | ppeguero                    |
 | José Moisés Martínez Lara    | 21393096@utcancun.edu.mx |   JoseMtz02                 |
+| Eduardo Gutiérrez Pacheco    | 22393212@utcancun.edu.mx | Blooxt                      |
+
 ## Librerías utilizadas
 - Vue
 - @heroicons/vue
