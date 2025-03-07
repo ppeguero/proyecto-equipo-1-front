@@ -13,6 +13,7 @@ operatividad interna como la experiencia del cliente.
 | Nombre completo              | Correo electrónico       | Nombre de usuario en github |
 | ---------------------------- | ------------------------ | --------------------------- |
 | Frida Paulina Peguero Tejero | 22393146@utcancun.edu.mx |                             |
+| José Moisés Martínez Lara    | 21393096@utcancun.edu.mx |   JoseMtz02                 |
 ## Librerías utilizadas
 - Vue
 - @heroicons/vue
