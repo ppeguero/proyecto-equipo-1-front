@@ -53,30 +53,24 @@ operatividad interna como la experiencia del cliente.
 
 1. Clonar el repositorio:
 
-   ```sh
-
-   git clone <URL_DEL_REPOSITORIO>
-
-   cd <NOMBRE_DEL_PROYECTO>
-
-   ```
+```sh
+git clone <URL_DEL_REPOSITORIO>
+cd <NOMBRE_DEL_PROYECTO>
+```
 
 2. Instalar dependencias:
 
-   ```sh
-
-   npm install
-
-   ```
+```sh
+npm install
+```
 
 
 3. Ejecutar la aplicación en modo desarrollo:
 
-   ```sh
-
-   npm run dev
-
-   ```### Descripción de cada carpeta
+```sh
+npm run dev
+```
+### Descripción de cada carpeta
 
   
 
@@ -101,35 +95,3 @@ operatividad interna como la experiencia del cliente.
 - **views/**: Agrupa las vistas principales de la aplicación, cada una representando una página o sección.
 
   
-
-## Instalación
-
-  
-
-1. Clonar el repositorio:
-
-  
-
-   ```sh
-
-   git clone <URL_DEL_REPOSITORIO>
-
-   cd <NOMBRE_DEL_PROYECTO>
-
-   ```
-  
-2. Instalar dependencias:
-
-   ```sh
-
-   npm install
-
-   ```
-
-3. Ejecutar la aplicación en modo desarrollo:
-
-   ```sh
-
-   npm run dev
-
-   ```
