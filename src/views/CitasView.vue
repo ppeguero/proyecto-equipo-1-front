@@ -65,7 +65,7 @@
       </div>
     </div>
 
- <div v-if="showDetailModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-10">
+ <div v-if="showDetailModal" class="fixed inset-0 flex items-center justify-center bg-black opacity-80">
       <div class="bg-white p-6 rounded-lg shadow-lg w-[800px] relative">
         <h2 class="text-xl font-bold text-center mb-4">Detalles del Paciente</h2>
         <div class="flex items-center gap-4 bg-gray-100 p-4 rounded-lg ">
