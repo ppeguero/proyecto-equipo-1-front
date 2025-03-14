@@ -11,25 +11,29 @@
         <img :src="Logo" alt="Logo" class="h-30 w-auto" />
       </div>
 
+      <!-- Menú de navegación -->
       <nav class="flex-grow w-full">
         <ul class="flex flex-col gap-3 w-full">
           <li v-for="item in filteredMenuItems" :key="item.path" class="w-full">
-            <Button
-              variant="text"
-              :style="{
-                color: '#375993',
-                display: 'flex',
-                width: '100%',
-                justifyContent: isCollapsed ? 'center' : 'flex-start',
-                padding: isCollapsed ? '1.5vh' : '1.5vh'
-              }"
-              :icon="item.icon"
-              :label="!isCollapsed ? item.label : ''"
-            />
+            <router-link :to="item.path" class="block w-full">
+              <Button
+                variant="text"
+                :style="{
+                  color: '#375993',
+                  display: 'flex',
+                  width: '100%',
+                  justifyContent: isCollapsed ? 'center' : 'flex-start',
+                  padding: '1.5vh'
+                }"
+                :icon="item.icon"
+                :label="!isCollapsed ? item.label : ''"
+              />
+            </router-link>
           </li>
         </ul>
       </nav>
 
+      <!-- Botón de Cerrar sesión -->
       <nav class="w-full">
         <ul class="flex flex-col gap-3 w-full">
           <li class="w-full">
@@ -40,7 +44,7 @@
                 display: 'flex',
                 width: '100%',
                 justifyContent: isCollapsed ? 'center' : 'flex-start',
-                padding: isCollapsed ? '1.5vh' : '1.5vh'
+                padding: '1.5vh'
               }"
               icon="pi pi-sign-out"
               :label="!isCollapsed ? 'Cerrar sesión' : ''"
@@ -54,11 +58,13 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { RouterLink } from 'vue-router';
 import Button from 'primevue/button';
 import Logo from '@/assets/img/logo.png';
 
 const props = defineProps<{ isCollapsed: boolean }>();
-//arreglotemporal
+
+// Arreglo de elementos del menú
 const baseMenuItems = [
   { label: 'Inicio', icon: 'pi pi-home', path: '/dashboard' },
   { label: 'Usuarios', icon: 'pi pi-users', path: '/dashboard/usuarios' },
@@ -71,3 +77,9 @@ const baseMenuItems = [
 
 const filteredMenuItems = computed(() => baseMenuItems);
 </script>
+
+<style scoped>
+.sidebar a {
+  text-decoration: none;
+}
+</style>
