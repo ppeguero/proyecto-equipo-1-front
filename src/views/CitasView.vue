@@ -5,29 +5,39 @@
       <button @click="showAddModal = true" class="bg-blue-500 text-white px-4 py-2 rounded">Registrar Cita</button>
     </div>
 
-    <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-      <thead class="bg-gray-200">
+    <table class="w-full text-sm text-left text-gray-700 border border-gray-200">
+      <thead class="text-xs uppercase bg-gray-100 text-gray-600">
         <tr>
-          <th class="py-2 px-4 border-b">ID</th>
-          <th class="py-2 px-4 border-b">Nombre del Paciente</th>
-          <th class="py-2 px-4 border-b">Fecha</th>
-          <th class="py-2 px-4 border-b">Hora</th>
-          <th class="py-2 px-4 border-b">Estado</th>
-          <th class="py-2 px-4 border-b">Acciones</th>
+          <th scope="col" class="px-6 py-3">ID</th>
+          <th scope="col" class="px-6 py-3">Nombre del Paciente</th>
+          <th scope="col" class="px-6 py-3">Fecha</th>
+          <th scope="col" class="px-6 py-3">Hora</th>
+          <th scope="col" class="px-6 py-3">Estado</th>
+          <th scope="col" class="px-6 py-3">Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="cita in citas" :key="cita.id" class="text-center">
-          <td class="py-2 px-4 border-b">{{ cita.id }}</td>
-          <td class="py-2 px-4 border-b">
-            <button @click="verDetalles(cita)" class="text-blue-500 underline">{{ cita.nombre }}</button>
+        <tr
+          v-for="cita in citas"
+          :key="cita.id"
+          class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
+
+          <td class="px-6 py-4">{{ cita.id }}</td>
+          <td class="px-6 py-4">
+            <button @click="verDetalles(cita)" class="text-blue-600 hover:underline">
+              {{ cita.nombre }}
+            </button>
           </td>
-          <td class="py-2 px-4 border-b">{{ cita.fecha }}</td>
-          <td class="py-2 px-4 border-b">{{ cita.hora }}</td>
-          <td class="py-2 px-4 border-b">{{ cita.estado }}</td>
-          <td class="py-2 px-4 border-b">
-            <button @click="editarCita(cita)" class="bg-yellow-500 text-white px-2 py-1 rounded mr-2">Editar</button>
-            <button @click="eliminarCita(cita.id)" class="bg-red-500 text-white px-2 py-1 rounded">Eliminar</button>
+          <td class="px-6 py-4">{{ cita.fecha }}</td>
+          <td class="px-6 py-4">{{ cita.hora }}</td>
+          <td class="px-6 py-4">{{ cita.estado }}</td>
+          <td class="px-6 py-4">
+            <button @click="editarCita(cita)" class="bg-yellow-500 text-white px-2 py-1 rounded mr-2">
+              Editar
+            </button>
+            <button @click="eliminarCita(cita.id)" class="bg-red-500 text-white px-2 py-1 rounded">
+              Eliminar
+            </button>
           </td>
         </tr>
       </tbody>
@@ -64,6 +74,8 @@
         </form>
       </div>
     </div>
+
+
 
  <div v-if="showDetailModal" class="fixed inset-0 flex items-center justify-center bg-black opacity-80">
       <div class="bg-white p-6 rounded-lg shadow-lg w-[800px] relative">
