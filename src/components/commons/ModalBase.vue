@@ -3,8 +3,9 @@
     :visible="visible"
     @update:visible="$emit('update:visible', $event)"
     :header="header"
-    :style="{ width: '25rem' }"
-    class="custom-modal"
+    :style="{ width: '35rem' }"
+    :modal="true"
+
   >
     <slot></slot>
     <template #footer>
@@ -27,5 +28,3 @@ defineEmits<{
   (e: "update:visible", value: boolean): void;
 }>();
 </script>
-
-

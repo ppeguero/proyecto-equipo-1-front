@@ -1,5 +1,5 @@
 <template>
-  <Toolbar class="header h-14 top-0 w-full fixed z-10" style="background-color: #bddbf3; padding: .5em;">
+  <Toolbar class="header h-14 top-0 w-full fixed z-10" style="background-color: #bddbf3; padding: .5em; border: none; border-radius: 0;">
     <template #start>
       <div class="flex items-center h-full">
         <Button

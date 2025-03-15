@@ -10,6 +10,7 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import Material from '@primeuix/themes/material'
 
+
 const app = createApp(App)
 
 app.use(createPinia())
