@@ -71,7 +71,7 @@ const baseMenuItems = [
   { label: 'Roles', icon: 'pi pi-user-edit', path: '/dashboard/roles' },
   { label: 'Citas', icon: 'pi pi-calendar', path: '/dashboard/citas' },
   { label: 'Clientes', icon: 'pi pi-briefcase', path: '/dashboard/clientes' },
-  { label: 'Mascotas', icon: 'pi pi-prime', path: '/dashboard/mascotas' },
+  { label: 'Mascotas', icon: 'pi pi-github', path: '/dashboard/mascotas' },
   { label: 'Medicamentos', icon: 'pi pi-cart-plus', path: '/dashboard/medicamentos' },
 ];
 

@@ -4,10 +4,15 @@ import { useStorage } from '@vueuse/core';
 
 const token = useStorage('token', '');
 
-const createAxiosInstance = (baseURL: string): AxiosInstance => {
+const createAxiosInstance = (): AxiosInstance => {
+  const baseURL = import.meta.env.VITE_API_BASE_URL as string;
+  if (!baseURL) {
+    throw new Error('VITE_API_BASE_URL no está definida en el archivo .env');
+    }
+
     const instance = axios.create({
         baseURL,
-        timeout: 10000, 
+        timeout: 10000,
         headers: {
             'Content-Type': 'application/json',
         },
@@ -16,7 +21,7 @@ const createAxiosInstance = (baseURL: string): AxiosInstance => {
     instance.interceptors.request.use(
         (config: InternalAxiosRequestConfig & { addToken?: boolean }) => {
 
-            if (config.addToken !== false) { 
+            if (config.addToken !== false) {
                 config.headers.set('Authorization', `Bearer ${token.value}`);
             }
             return config;
@@ -41,7 +46,7 @@ const createAxiosInstance = (baseURL: string): AxiosInstance => {
     return instance;
 };
 
-export const axiosInstance = createAxiosInstance('https://localhost:7212/api');
+export const axiosInstance = createAxiosInstance();
 
 interface ApiRequestParams<T = any> {
     method: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'head' | 'options';
