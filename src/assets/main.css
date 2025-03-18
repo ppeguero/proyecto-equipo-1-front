@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+.p-datatable-column-header-content {
+    display: flex
+;
+    align-items: center;
+    gap: var(--p-datatable-header-cell-gap);
+    justify-content: center;
+}
