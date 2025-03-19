@@ -1,6 +1,6 @@
 <template>
   <div class="mx-4">
-    <div class="flex justify-between mb-10">
+    <div class="flex justify-between items-center mb-6">
       <h1 class="text-3xl font-bold py-2 pl-2 text-gray-800">Medicamentos</h1>
       <Button label="Agregar Medicamento" @click="openModal('add')" class="custom-primary-button" />
     </div>
@@ -25,19 +25,19 @@
           <Button
             v-if="modalMode === 'add'"
             label="Agregar"
-            @click="addMedicamento"
+            @click="addMed"
             class="custom-primary-button"
           />
           <Button
             v-else-if="modalMode === 'edit'"
             label="Guardar"
-            @click="editMedicamento"
+            @click="editMed"
             class="custom-primary-button"
           />
           <Button
             v-else-if="modalMode === 'delete'"
             label="Eliminar"
-            @click="deleteMedicamento"
+            @click="deleteMed"
             class="custom-danger-button"
           />
         </div>
@@ -49,26 +49,27 @@
       @edit="openModal('edit', $event)"
       @delete="openModal('delete', $event)"
     />
+    <Toast />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useMedicamentoStore } from '@/stores/medicamentoStore';
+import { useToast } from 'primevue/usetoast';
 import Button from 'primevue/button';
 import ModalBase from '@/components/commons/ModalBase.vue';
 import MedicamentosForm from '@/components/medicamentos/MedicamentosForm.vue';
 import MedicamentosTable from '@/components/medicamentos/MedicamentosTable.vue';
-import { medicamentos } from '@/data/medicamentosData';
+import Toast from 'primevue/toast';
+import type { Medicamento, MedicamentoCreateDto, MedicamentoUpdateDto } from '@/interfaces/Medicamento';
+import { storeToRefs } from 'pinia';
 
-interface Medicamento {
-  id: number;
-  nombre: string;
-  descripcion: string;
-  dosis: string;
-  fechaVencimiento: string;
-  stock: number;
-  fechaCreacion: string;
-}
+const medicamentoStore = useMedicamentoStore();
+const { fetchMedicamentos, addMedicamento, updateMedicamento, deleteMedicamento } = medicamentoStore;
+const { medicamentos } = storeToRefs(medicamentoStore);
+
+const toast = useToast();
 
 const modalVisible = ref(false);
 const modalMode = ref<'add' | 'edit' | 'delete'>('add');
@@ -76,17 +77,17 @@ const selectedMedicamento = ref<Medicamento | null>(null);
 const modalHeader = ref('');
 const medicamentoForm = ref<InstanceType<typeof MedicamentosForm> | null>(null);
 
+onMounted(async () => {
+  await fetchMedicamentos();
+});
+
 const openModal = (mode: 'add' | 'edit' | 'delete', medicamento?: Medicamento) => {
   modalMode.value = mode;
   selectedMedicamento.value = medicamento ? { ...medicamento } : null;
 
-  if (mode === 'add') {
-    modalHeader.value = 'Agregar Medicamento';
-  } else if (mode === 'edit') {
-    modalHeader.value = 'Editar Medicamento';
-  } else if (mode === 'delete') {
-    modalHeader.value = 'Eliminar Medicamento';
-  }
+  if (mode === 'add') modalHeader.value = 'Agregar Medicamento';
+  else if (mode === 'edit') modalHeader.value = 'Editar Medicamento';
+  else if (mode === 'delete') modalHeader.value = 'Eliminar Medicamento';
 
   modalVisible.value = true;
 };
@@ -95,42 +96,63 @@ const closeModal = () => {
   modalVisible.value = false;
 };
 
-const addMedicamento = async () => {
+const addMed = async () => {
   if (medicamentoForm.value && (await medicamentoForm.value.validateForm())) {
-    const newMedicamento = medicamentoForm.value.localMedicamento;
-    const medicamentoToAdd: Medicamento = {
-      id: medicamentos.length + 1,
-      nombre: newMedicamento.nombre,
-      descripcion: newMedicamento.descripcion,
-      dosis: newMedicamento.dosis,
-      fechaVencimiento: newMedicamento.fechaVencimiento,
-      stock: newMedicamento.stock,
-      fechaCreacion: new Date().toISOString().split('T')[0],
-    };
-    medicamentos.push(medicamentoToAdd);
-    closeModal();
+    try {
+      const newMedicamento = medicamentoForm.value.localMedicamento;
+      const medicamentoDto: MedicamentoCreateDto = {
+        nombre: newMedicamento.nombre,
+        descripcion: newMedicamento.descripcion,
+        dosis: newMedicamento.dosis,
+        fechaVencimiento: new Date(newMedicamento.fechaVencimiento).toISOString().split('T')[0], // Formato "yyyy-MM-dd"
+        stock: Number(newMedicamento.stock),
+      };
+      await addMedicamento(medicamentoDto);
+      await fetchMedicamentos();
+      toast.add({ severity: 'success', summary: 'Éxito', detail: 'Medicamento agregado correctamente', life: 3000 });
+      closeModal();
+    } catch (error) {
+      toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo agregar el medicamento', life: 3000 });
+      console.error('Error al agregar medicamento:', error);
+    }
   }
 };
 
-const editMedicamento = async () => {
+const editMed = async () => {
   if (medicamentoForm.value && selectedMedicamento.value && (await medicamentoForm.value.validateForm())) {
-    const updatedMedicamento = medicamentoForm.value.localMedicamento;
-    const index = medicamentos.findIndex((m) => m.id === selectedMedicamento.value!.id);
-    if (index !== -1) {
-      medicamentos[index] = { ...selectedMedicamento.value, ...updatedMedicamento };
+    try {
+      const updatedMedicamento = medicamentoForm.value.localMedicamento;
+      const medicamentoDto: MedicamentoUpdateDto = {
+        id: selectedMedicamento.value.id,
+        nombre: updatedMedicamento.nombre,
+        descripcion: updatedMedicamento.descripcion,
+        dosis: updatedMedicamento.dosis,
+        fechaVencimiento: new Date(updatedMedicamento.fechaVencimiento).toISOString().split('T')[0],
+        stock: Number(updatedMedicamento.stock),
+      };
+      await updateMedicamento(selectedMedicamento.value.id, medicamentoDto);
+      await fetchMedicamentos();
+      toast.add({ severity: 'success', summary: 'Éxito', detail: 'Medicamento actualizado correctamente', life: 3000 });
+      closeModal();
+    } catch (error) {
+      toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar el medicamento', life: 3000 });
+      console.error('Error al actualizar medicamento:', error);
     }
-    closeModal();
   }
 };
 
-const deleteMedicamento = () => {
+const deleteMed = async () => {
   if (selectedMedicamento.value) {
-    const index = medicamentos.findIndex((m) => m.id === selectedMedicamento.value!.id);
-    if (index !== -1) {
-      medicamentos.splice(index, 1);
+    try {
+      await deleteMedicamento(selectedMedicamento.value.id);
+      await fetchMedicamentos();
+      toast.add({ severity: 'success', summary: 'Éxito', detail: 'Medicamento eliminado correctamente', life: 3000 });
+      closeModal();
+    } catch (error) {
+      toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el medicamento', life: 3000 });
+      console.error('Error al eliminar medicamento:', error);
     }
   }
-  closeModal();
 };
 </script>
 
@@ -140,27 +162,22 @@ const deleteMedicamento = () => {
   border-color: #001F3F !important;
   color: white !important;
 }
-
 .custom-primary-button:hover {
   background-color: #003366 !important;
 }
-
 .custom-danger-button {
   background-color: #dc3545 !important;
   border-color: #dc3545 !important;
   color: white !important;
 }
-
 .custom-danger-button:hover {
   background-color: #c82333 !important;
 }
-
 .custom-cancel-button {
   color: #001F3F !important;
   background-color: transparent !important;
   border-color: #001F3F;
 }
-
 .custom-cancel-button:hover {
   background-color: #b8d7ff8c !important;
   color: #001F3F !important;
