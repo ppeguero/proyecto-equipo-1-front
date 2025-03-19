@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-4 w-full">
     <div class="flex flex-col gap-1">
-      <label for="imagen" class="font-semibold">Imagen de la Mascota</label>
+      <label for="imagen" class="font-semibold">Imagen del paciente</label>
       <div class="card">
         <FileUpload
           name="imagenFile"
@@ -85,27 +85,32 @@
     </div>
 
     <div class="flex flex-col gap-1">
+            <label class="font-semibold">Nombre del paciente</label>
       <InputText
         v-model="localPet.nombre"
-        placeholder="Nombre de la mascota"
+        placeholder="Ingrese nombre del paciente"
         :class="{ 'p-invalid': errors.nombre }"
         class="custom-input"
       />
       <small v-if="errors.nombre" class="p-error">{{ errors.nombre }}</small>
     </div>
     <div class="flex flex-col gap-1">
+     <label  class="font-semibold">Raza</label>
+
       <InputText
         v-model="localPet.raza"
-        placeholder="Raza"
+        placeholder="Ingrese nombre de la raza"
         :class="{ 'p-invalid': errors.raza }"
         class="custom-input"
       />
       <small v-if="errors.raza" class="p-error">{{ errors.raza }}</small>
     </div>
     <div class="flex flex-col gap-1">
+           <label  class="font-semibold">Especie</label>
+
       <InputText
         v-model="localPet.especie"
-        placeholder="Especie"
+        placeholder="Ingrese nombre de la especie"
         :class="{ 'p-invalid': errors.especie }"
         class="custom-input"
       />
@@ -115,7 +120,7 @@
       <label for="fechaNacimiento" class="font-semibold">Fecha de Nacimiento</label>
       <DatePicker
         v-model="localPet.fechaNacimiento"
-        placeholder="Fecha de Nacimiento"
+        placeholder="Eliga fecha de nacimiento"
         dateFormat="yy-mm-dd"
         :class="{ 'p-invalid': errors.fechaNacimiento }"
         class="custom-input"
@@ -129,7 +134,7 @@
         :options="clientes"
         optionLabel="nombreCompleto"
         optionValue="id"
-        placeholder="Seleccionar Cliente"
+        placeholder="Seleccione el cliente"
         :class="{ 'p-invalid': errors.clienteId }"
         class="custom-input"
       />
@@ -233,7 +238,7 @@ watch(
         raza: newPet.raza || "",
         especie: newPet.especie || "",
         fechaNacimiento: newPet.fechaNacimiento || "",
-        clienteId: newPet.clienteId || 0, 
+        clienteId: newPet.clienteId || 0,
         urlImagen: newPet.urlImagen || "",
       };
       files.value = [];

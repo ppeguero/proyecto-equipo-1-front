@@ -2,8 +2,13 @@
   <div class="mx-4">
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-3xl font-bold py-2 pl-2 text-gray-800">Pacientes</h1>
-      <Button label="Agregar Paciente" @click="openModal('add')" class="custom-primary-button" />
-    </div>
+<Button
+    :label="isMobile ? '' : 'Agregar Paciente'"
+    :icon="isMobile ? 'pi pi-plus' : ''"
+    @click="openModal('add')"
+    class="custom-primary-button"
+  />
+</div>
 
     <ModalBase
       :visible="modalVisible"
@@ -56,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useMascotaStore } from '@/stores/mascotaStore';
 import { useClienteStore } from '@/stores/clienteStore';
 import { useToast } from 'primevue/usetoast';
@@ -82,10 +87,21 @@ const modalMode = ref<'add' | 'edit' | 'delete'>('add');
 const selectedPet = ref<Mascota | null>(null);
 const modalHeader = ref('');
 const petForm = ref<InstanceType<typeof PetForm> | null>(null);
+const isMobile = ref(false);
+
+const checkMobile = () => {
+  isMobile.value = window.matchMedia("(max-width: 768px)").matches;
+};
 
 onMounted(async () => {
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
   await fetchClientes();
   await fetchMascotas();
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile);
 });
 
 const openModal = (mode: 'add' | 'edit' | 'delete', pet?: Mascota) => {
