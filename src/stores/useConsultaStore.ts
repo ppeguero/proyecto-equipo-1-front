@@ -14,7 +14,7 @@ export const useConsultaStore = defineStore('consulta', () => {
         error.value = null;
         try {
             const response = await consultaService.getAll();
-            console.log(response.data);
+            console.log(response);
             consultas.value = response.data;
             console.log(consultas.value);
         } catch (err) {

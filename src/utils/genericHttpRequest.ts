@@ -5,9 +5,14 @@ import { ref } from 'vue';
 
 //const token = useStorage('token', '');
 const token = ref('');
-token.value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBZG1pbmlzdHJhZG9yIiwibmJmIjoxNzQyMjQ1OTIyLCJleHAiOjE3NDIyNDk1MjIsImlhdCI6MTc0MjI0NTkyMn0.eCtvBx2kFRSwqcYPl5OqKlKnq-SDYpxA3mntpDNFOV8"
+token.value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBZG1pbmlzdHJhZG9yIiwibmJmIjoxNzQyNDE3OTI4LCJleHAiOjE3NDI0MjE1MjgsImlhdCI6MTc0MjQxNzkyOH0.WO0x2CPSh1Vfs6agJLNXE07CmBZF4qAFf3Q0XqmMDtI"
 
-const createAxiosInstance = (baseURL: string): AxiosInstance => {
+const createAxiosInstance = (): AxiosInstance => {
+  const baseURL = import.meta.env.VITE_API_BASE_URL as string;
+  if (!baseURL) {
+    throw new Error('VITE_API_BASE_URL no está definida en el archivo .env');
+    }
+
     const instance = axios.create({
         baseURL,
         timeout: 10000,
@@ -44,7 +49,7 @@ const createAxiosInstance = (baseURL: string): AxiosInstance => {
     return instance;
 };
 
-export const axiosInstance = createAxiosInstance('https://localhost:7212/api');
+export const axiosInstance = createAxiosInstance();
 
 interface ApiRequestParams<T = any> {
     method: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'head' | 'options';
