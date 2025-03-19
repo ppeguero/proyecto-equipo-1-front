@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { useStorage } from '@vueuse/core';
+import { ref } from 'vue';
 
-const token = useStorage('token', '');
+//const token = useStorage('token', '');
+const token = ref('');
+token.value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBZG1pbmlzdHJhZG9yIiwibmJmIjoxNzQyMjQ1OTIyLCJleHAiOjE3NDIyNDk1MjIsImlhdCI6MTc0MjI0NTkyMn0.eCtvBx2kFRSwqcYPl5OqKlKnq-SDYpxA3mntpDNFOV8"
 
 const createAxiosInstance = (baseURL: string): AxiosInstance => {
     const instance = axios.create({
         baseURL,
-        timeout: 10000, 
+        timeout: 10000,
         headers: {
             'Content-Type': 'application/json',
         },
@@ -16,7 +19,7 @@ const createAxiosInstance = (baseURL: string): AxiosInstance => {
     instance.interceptors.request.use(
         (config: InternalAxiosRequestConfig & { addToken?: boolean }) => {
 
-            if (config.addToken !== false) { 
+            if (config.addToken !== false) {
                 config.headers.set('Authorization', `Bearer ${token.value}`);
             }
             return config;

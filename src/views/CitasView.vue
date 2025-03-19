@@ -2,47 +2,38 @@
   <div class="container mx-auto p-4">
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-2xl font-bold">Dashboard de Citas</h1>
-      <button @click="showAddModal = true" class="bg-blue-500 text-white px-4 py-2 rounded">Registrar Cita</button>
+      <button @click="showAddModal = true" class="bg-blue-500 text-white px-4 py-2 rounded">
+        Registrar Cita
+      </button>
     </div>
 
-    <table class="w-full text-sm text-left text-gray-700 border border-gray-200">
-      <thead class="text-xs uppercase bg-gray-100 text-gray-600">
-        <tr>
-          <th scope="col" class="px-6 py-3">ID</th>
-          <th scope="col" class="px-6 py-3">Nombre del Paciente</th>
-          <th scope="col" class="px-6 py-3">Fecha</th>
-          <th scope="col" class="px-6 py-3">Hora</th>
-          <th scope="col" class="px-6 py-3">Estado</th>
-          <th scope="col" class="px-6 py-3">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="cita in citas"
-          :key="cita.id"
-          class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
+    <div v-if="consultaStore.loading">Cargando...</div>
+    <div v-else-if="consultaStore.error">{{ consultaStore.error }}</div>
+    <!-- ✅ PrimeVue DataTable -->
+    <DataTable :value="consultaStore.consultas"  stripedRows tableStyle="min-width: 50rem">
+      <Column field="id" header="ID"></Column>
+      <Column header="Nombre del Paciente">
+        <template #body="slotProps">
+          <button @click="verDetalles(slotProps.data)" class="text-blue-600 hover:underline">
+            {{ slotProps.data.nombre }}
+          </button>
+        </template>
+      </Column>
+      <Column field="fecha" header="Fecha"></Column>
+      <Column field="hora" header="Hora"></Column>
+      <Column field="estado" header="Estado"></Column>
+      <Column header="Acciones">
+        <template #body="slotProps">
+          <div class="flex gap-2">
+            <Button @click="editarCita(slotProps.data)" label="Editar" severity="info"></Button>
+            <Button @click="eliminarCita(slotProps.data.id)" label="Eliminar" severity="danger"></Button>
+          </div>
 
-          <td class="px-6 py-4">{{ cita.id }}</td>
-          <td class="px-6 py-4">
-            <button @click="verDetalles(cita)" class="text-blue-600 hover:underline">
-              {{ cita.nombre }}
-            </button>
-          </td>
-          <td class="px-6 py-4">{{ cita.fecha }}</td>
-          <td class="px-6 py-4">{{ cita.hora }}</td>
-          <td class="px-6 py-4">{{ cita.estado }}</td>
-          <td class="px-6 py-4">
-            <button @click="editarCita(cita)" class="bg-yellow-500 text-white px-2 py-1 rounded mr-2">
-              Editar
-            </button>
-            <button @click="eliminarCita(cita.id)" class="bg-red-500 text-white px-2 py-1 rounded">
-              Eliminar
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        </template>
+      </Column>
+    </DataTable>
 
+    <!-- Modal de Registro y Edición -->
     <div v-if="showAddModal || showEditModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
       <div class="bg-white p-4 rounded w-96">
         <h2 class="text-xl font-bold mb-4">{{ showEditModal ? 'Editar Cita' : 'Registrar Cita' }}</h2>
@@ -75,12 +66,11 @@
       </div>
     </div>
 
-
-
- <div v-if="showDetailModal" class="fixed inset-0 flex items-center justify-center bg-black opacity-80">
+    <!-- Modal de Detalles -->
+    <div v-if="showDetailModal" class="fixed inset-0 flex items-center justify-center bg-black opacity-80">
       <div class="bg-white p-6 rounded-lg shadow-lg w-[800px] relative">
         <h2 class="text-xl font-bold text-center mb-4">Detalles del Paciente</h2>
-        <div class="flex items-center gap-4 bg-gray-100 p-4 rounded-lg ">
+        <div class="flex items-center gap-4 bg-gray-100 p-4 rounded-lg">
           <img :src="detallePaciente.foto" alt="Paciente" class="w-24 h-24 rounded-full border-2 border-blue-500" />
           <div class="ml-15">
             <p><strong>Nombre:</strong> {{ detallePaciente.nombre }}</p>
@@ -112,11 +102,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Button from 'primevue/button';
+import { useConsultaStore } from '@/stores/useConsultaStore';
 
-const citas = ref([
-  { id: 1, nombre: 'Nala', fecha: '13/03/2025', hora: '11:00 AM', estado: 'Pendiente' }
-]);
+const consultaStore = useConsultaStore();
+
+onMounted(() => {
+  consultaStore.fetchAllConsultas();
+});
 
 const showDetailModal = ref(false);
 const showAddModal = ref(false);
@@ -149,16 +145,13 @@ const eliminarCita = (id) => {
 
 const verDetalles = (cita) => {
   detallePaciente.value = {
+    ...cita,
     foto: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8uf8MOJZJ4M-BZ5f4gThsH_JyT5-M_aw4Wg&s',
-    nombre: cita.nombre,
     especie: 'Hámster',
     raza: 'Hámster Sirio',
     dueno: 'Ricardo',
-    fecha: '13/03/2025',
     edad: '2 años',
-    estado: cita.estado,
-    motivo: 'El hámster sufrió un accidente cuando un mango entero cayó sobre él. Desde el incidente, ha mostrado signos de dolor, dificultad para moverse y pérdida de apetito. Se solicita revisión para evaluar posibles fracturas, contusiones internas o cualquier otra lesión derivada del impacto.',
-    hora: cita.hora
+    motivo: 'Revisión médica.'
   };
   showDetailModal.value = true;
 };
