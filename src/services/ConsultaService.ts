@@ -5,6 +5,7 @@ export interface Consulta {
   id: number
   fecha: string
   hora: string
+  estatus: number
   motivo: string
   mascotaId?: number
   veterinarioId?: number

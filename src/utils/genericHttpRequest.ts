@@ -5,7 +5,7 @@ import { ref } from 'vue';
 
 //const token = useStorage('token', '');
 const token = ref('');
-token.value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBZG1pbmlzdHJhZG9yIiwibmJmIjoxNzQyNDE3OTI4LCJleHAiOjE3NDI0MjE1MjgsImlhdCI6MTc0MjQxNzkyOH0.WO0x2CPSh1Vfs6agJLNXE07CmBZF4qAFf3Q0XqmMDtI"
+token.value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBZG1pbmlzdHJhZG9yIiwibmJmIjoxNzQyNDMxMjc5LCJleHAiOjE3NDI0MzQ4NzksImlhdCI6MTc0MjQzMTI3OX0.stJcQSCi0zS6-U4UxDiWKqkyXNKCTGGhRegjGjxBWdA"
 
 const createAxiosInstance = (): AxiosInstance => {
   const baseURL = import.meta.env.VITE_API_BASE_URL as string;
