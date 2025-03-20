@@ -5,6 +5,8 @@ import { authService } from '../services/AuthService';
 
 const token = useStorage('token', '');
 const refreshToken = useStorage('refreshToken', '');
+let isRefreshing = false;
+let refreshFailed = false;
 
 const createAxiosInstance = (): AxiosInstance => {
   const baseURL = import.meta.env.VITE_API_BASE_URL as string;
@@ -33,33 +35,52 @@ const createAxiosInstance = (): AxiosInstance => {
     }
   );
 
+
   instance.interceptors.response.use(
     (response: AxiosResponse) => response,
     async (error: AxiosError) => {
       const ogRequest = error.config as InternalAxiosRequestConfig & {
-        retry?: boolean
+        retry?: boolean;
       };
-      if (error.response?.status === 401 && !ogRequest.retry) { // temporal
+
+      if (error.response?.status === 401 && !ogRequest.retry) {
         ogRequest.retry = true;
 
-        try {
-          const response = await authService.refreshToken(token.value, refreshToken.value);
-          token.value = response.data.token;
-          refreshToken.value = response.data.refreshToken;
+        if (refreshFailed) {
+          window.location.href = '/login';
+          return Promise.reject(error);
+        }
 
-          ogRequest.headers['Authorization'] = `Bearer ${token.value}`;
-          return instance(ogRequest);
-        } catch (error) {
-          console.error('Error al refrescar el token:', error);
-          return Promise.reject(error)
+        if (!isRefreshing) {
+          isRefreshing = true;
+          try {
+            const response = await authService.refreshToken(token.value, refreshToken.value);
+            token.value = response.data.token;
+            refreshToken.value = response.data.refreshToken;
+
+            ogRequest.headers['Authorization'] = `Bearer ${token.value}`;
+            return instance(ogRequest);
+          } catch (refreshError) {
+            console.error('Error al refrescar el token:', refreshError);
+            isRefreshing = false;
+            refreshFailed = true;
+            token.value = '';
+            refreshToken.value = '';
+            window.location.href = '/login';
+            return Promise.reject(refreshError);
+          }
         }
       }
+
+      await new Promise((resolve) => setTimeout(resolve, 100));
       return Promise.reject(error);
     }
   );
-
   return instance;
 };
+
+
+
 
 export interface CustomAxiosRequestConfig extends AxiosRequestConfig{
   addToken?: boolean;
