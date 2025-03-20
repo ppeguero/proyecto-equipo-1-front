@@ -48,6 +48,7 @@
               }"
               icon="pi pi-sign-out"
               :label="!isCollapsed ? 'Cerrar sesión' : ''"
+              @click="logout"
             />
           </li>
         </ul>
@@ -58,13 +59,28 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { RouterLink } from 'vue-router';
+import { useRouter } from 'vue-router';
 import Button from 'primevue/button';
 import Logo from '@/assets/img/logo.png';
+import { useStorage } from '@vueuse/core';
+import { authService } from '@/services/AuthService';
 
+const router = useRouter();
 const props = defineProps<{ isCollapsed: boolean }>();
 
-// Arreglo de elementos del menú
+const token = useStorage('token', '');
+
+const logout = async () => {
+  try {
+    await authService.logout();
+  } catch (error) {
+    console.error('Error al cerrar sesión:', error);
+  } finally {
+    token.value = '';
+    router.push('/login');
+  }
+};
+
 const baseMenuItems = [
   { label: 'Inicio', icon: 'pi pi-home', path: '/dashboard' },
   { label: 'Usuarios', icon: 'pi pi-users', path: '/dashboard/usuarios' },

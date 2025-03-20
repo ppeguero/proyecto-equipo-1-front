@@ -1,15 +1,17 @@
 <template>
   <div class="flex flex-col gap-4 w-full">
     <div class="flex flex-col gap-1">
+      <label  class="font-semibold">Nombre del cliente</label>
       <InputText
         v-model="localCliente.nombre"
-        placeholder="Nombre"
+        placeholder="Ingrese nombre del cliente"
         :class="{ 'p-invalid': errors.nombre }"
         class="custom-input"
       />
       <small v-if="errors.nombre" class="p-error">{{ errors.nombre }}</small>
     </div>
     <div class="flex flex-col gap-1">
+      <label  class="font-semibold">Especie</label>
       <InputText
         v-model="localCliente.apellido"
         placeholder="Apellido"
@@ -36,10 +38,10 @@
       />
       <small v-if="errors.telefono" class="p-error">{{ errors.telefono }}</small>
     </div>
-    <div class="flex flex-col gap-1">
+    <div class="flex flex-col">
       <label class="font-semibold">Mascotas</label>
-      <div v-if="localCliente.mascotas && localCliente.mascotas.length > 0" class="flex flex-col gap-2">
-        <div v-for="mascota in localCliente.mascotas" :key="mascota.id" class="flex items-center gap-2">
+      <div v-if="localCliente.mascotas && localCliente.mascotas.length > 0" class="flex flex-wrap justify-center">
+        <div v-for="mascota in localCliente.mascotas" :key="mascota.id" class="flex items-center p-4 gap-0.5">
           <Button
           :value="mascota.nombre"
           severity="info"
@@ -49,6 +51,7 @@
           />
           <Button
             icon="pi pi-times"
+            style="height: 5vh; width: 2.5vw;"
             class="p-button-rounded p-button-text p-button-danger"
             @click="removeMascota(mascota.id)"
           />

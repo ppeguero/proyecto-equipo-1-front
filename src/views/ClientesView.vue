@@ -1,9 +1,14 @@
 <template>
   <div class="mx-4">
-    <div class="flex justify-between mb-10">
+    <div class="flex justify-between items-center mb-6">
       <h1 class="text-3xl font-bold py-2 pl-2 text-gray-800">Clientes</h1>
-      <Button label="Agregar Cliente" @click="openModal('add')" class="custom-primary-button" />
-    </div>
+  <Button
+    :label="isMobile ? '' : 'Agregar Cliente'"
+    :icon="isMobile ? 'pi pi-plus' : ''"
+    @click="openModal('add')"
+    class="custom-primary-button mt-2"
+  />
+</div>
 
     <ModalBase
       :visible="modalVisible"
@@ -56,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useClienteStore } from '@/stores/clienteStore';
 import { useToast } from 'primevue/usetoast';
 import Button from 'primevue/button';
@@ -78,9 +83,21 @@ const modalMode = ref<'add' | 'edit' | 'delete'>('add');
 const selectedCliente = ref<Partial<Cliente> | null>(null);
 const modalHeader = ref('');
 const clientForm = ref<InstanceType<typeof ClientForm> | null>(null);
+const isMobile = ref(false);
+
+const checkMobile = () => {
+  isMobile.value = window.matchMedia("(max-width: 768px)").matches;
+};
+
 
 onMounted(() => {
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
   fetchClientes();
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile);
 });
 
 const openModal = (mode: 'add' | 'edit' | 'delete', cliente?: Cliente) => {
@@ -186,11 +203,7 @@ const handleDeleteCliente = async () => {
   border-color: #001F3F !important;
 }
 
-::v-deep .p-datatable-thead > tr > th,
-::v-deep .p-datatable-tbody > tr > td {
 
-  text-align: center !important;
-}
 
 
 </style>
