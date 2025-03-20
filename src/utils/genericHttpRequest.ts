@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { useStorage } from '@vueuse/core';
+import { authService } from '../services/AuthService';
 
 const token = useStorage('token', '');
+const refreshToken = useStorage('refreshToken', '');
 
 const createAxiosInstance = (): AxiosInstance => {
   const baseURL = import.meta.env.VITE_API_BASE_URL as string;
@@ -21,7 +23,7 @@ const createAxiosInstance = (): AxiosInstance => {
   instance.interceptors.request.use(
     (config: InternalAxiosRequestConfig & { addToken?: boolean }) => {
 
-      if (config.addToken !== false) {
+      if (config.addToken !== false && token.value) {
         config.headers.set('Authorization', `Bearer ${token.value}`);
       }
       return config;
@@ -32,12 +34,25 @@ const createAxiosInstance = (): AxiosInstance => {
   );
 
   instance.interceptors.response.use(
-    (response: AxiosResponse) => {
-      return response;
-    },
-    (error: AxiosError) => {
-      if (error.response?.status === 401) { // temporal
-        console.error('No autorizado, redirigiendo...');
+    (response: AxiosResponse) => response,
+    async (error: AxiosError) => {
+      const ogRequest = error.config as InternalAxiosRequestConfig & {
+        retry?: boolean
+      };
+      if (error.response?.status === 401 && !ogRequest.retry) { // temporal
+        ogRequest.retry = true;
+
+        try {
+          const response = await authService.refreshToken(token.value, refreshToken.value);
+          token.value = response.data.token;
+          refreshToken.value = response.data.refreshToken;
+
+          ogRequest.headers['Authorization'] = `Bearer ${token.value}`;
+          return instance(ogRequest);
+        } catch (error) {
+          console.error('Error al refrescar el token:', error);
+          return Promise.reject(error)
+        }
       }
       return Promise.reject(error);
     }
@@ -45,6 +60,10 @@ const createAxiosInstance = (): AxiosInstance => {
 
   return instance;
 };
+
+export interface CustomAxiosRequestConfig extends AxiosRequestConfig{
+  addToken?: boolean;
+}
 
 export const axiosInstance = createAxiosInstance();
 
