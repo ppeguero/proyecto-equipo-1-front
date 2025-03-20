@@ -38,6 +38,12 @@
       <template #body="{ data }">
         <div class="flex gap-2 justify-center">
           <Button
+          icon="pi pi-search"
+          class="p-button-rounded p-button-text"
+           style="color: #008040"
+          @click="$emit('detail', data)"
+          />
+          <Button
             icon="pi pi-pencil"
             class="p-button-rounded p-button-text"
             style="color: #1e88e5"
@@ -67,7 +73,7 @@ const props = defineProps<{
   clientes: Cliente[];
 }>();
 
-defineEmits(["edit", "delete"]);
+defineEmits(["edit", "delete", "detail"]);
 
 const columns = [
   { field: "nombre", header: "Nombre Mascota", width: "15%" },
@@ -75,7 +81,7 @@ const columns = [
   { field: "fechaNacimiento", header: "Fecha Nacimiento", width: "15%" },
   { field: "raza", header: "Raza", width: "10%" },
   { field: "especie", header: "Especie", width: "10%" },
-  { field: "clienteNombre", header: "Cliente", width: "15%" }, 
+  { field: "clienteNombre", header: "Cliente", width: "15%" },
 ];
 
 const getClienteNombre = (clienteId: number) => {

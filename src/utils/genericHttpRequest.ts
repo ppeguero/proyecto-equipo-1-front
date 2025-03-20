@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { useStorage } from '@vueuse/core';
-import { ref } from 'vue';
+import { authService } from '../services/AuthService';
 
-//const token = useStorage('token', '');
-const token = ref('');
-token.value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBZG1pbmlzdHJhZG9yIiwibmJmIjoxNzQyNDMxMjc5LCJleHAiOjE3NDI0MzQ4NzksImlhdCI6MTc0MjQzMTI3OX0.stJcQSCi0zS6-U4UxDiWKqkyXNKCTGGhRegjGjxBWdA"
+const token = useStorage('token', '');
+const refreshToken = useStorage('refreshToken', '');
+let isRefreshing = false;
+let refreshFailed = false;
 
 const createAxiosInstance = (): AxiosInstance => {
   const baseURL = import.meta.env.VITE_API_BASE_URL as string;
@@ -24,7 +25,7 @@ const createAxiosInstance = (): AxiosInstance => {
   instance.interceptors.request.use(
     (config: InternalAxiosRequestConfig & { addToken?: boolean }) => {
 
-      if (config.addToken !== false) {
+      if (config.addToken !== false && token.value) {
         config.headers.set('Authorization', `Bearer ${token.value}`);
       }
       return config;
@@ -34,20 +35,56 @@ const createAxiosInstance = (): AxiosInstance => {
     }
   );
 
+
   instance.interceptors.response.use(
-    (response: AxiosResponse) => {
-      return response;
-    },
-    (error: AxiosError) => {
-      if (error.response?.status === 401) { // temporal
-        console.error('No autorizado, redirigiendo...');
+    (response: AxiosResponse) => response,
+    async (error: AxiosError) => {
+      const ogRequest = error.config as InternalAxiosRequestConfig & {
+        retry?: boolean;
+      };
+
+      if (error.response?.status === 401 && !ogRequest.retry) {
+        ogRequest.retry = true;
+
+        if (refreshFailed) {
+          window.location.href = '/login';
+          return Promise.reject(error);
+        }
+
+        if (!isRefreshing) {
+          isRefreshing = true;
+          try {
+            const response = await authService.refreshToken(token.value, refreshToken.value);
+            token.value = response.data.token;
+            refreshToken.value = response.data.refreshToken;
+
+            ogRequest.headers['Authorization'] = `Bearer ${token.value}`;
+            return instance(ogRequest);
+          } catch (refreshError) {
+            console.error('Error al refrescar el token:', refreshError);
+            isRefreshing = false;
+            refreshFailed = true;
+            token.value = '';
+            refreshToken.value = '';
+            window.location.href = '/login';
+            return Promise.reject(refreshError);
+          }
+        }
       }
+
+      await new Promise((resolve) => setTimeout(resolve, 100));
       return Promise.reject(error);
     }
   );
-
   return instance;
 };
+
+
+
+
+export interface CustomAxiosRequestConfig extends AxiosRequestConfig{
+  addToken?: boolean;
+}
 
 export const axiosInstance = createAxiosInstance();
 

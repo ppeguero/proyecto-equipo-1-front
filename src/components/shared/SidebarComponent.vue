@@ -69,14 +69,17 @@ const router = useRouter();
 const props = defineProps<{ isCollapsed: boolean }>();
 
 const token = useStorage('token', '');
+const refreshToken = useStorage('refreshToken', '');
 
 const logout = async () => {
   try {
-    await authService.logout();
+    await authService.logout(refreshToken.value);
   } catch (error) {
     console.error('Error al cerrar sesión:', error);
   } finally {
-    token.value = '';
+        token.value = '';
+    refreshToken.value = '';
+
     router.push('/login');
   }
 };
