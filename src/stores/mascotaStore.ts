@@ -14,13 +14,6 @@ export const useMascotaStore = defineStore("mascota", () => {
     }
   }
 
-  async function fetchMascotasByCliente(clienteId: number) {
-    try {
-      mascotas.value = await mascotaService.getByCliente(clienteId);
-    } catch (error) {
-      console.error("Error al obtener mascotas por cliente:", error);
-    }
-  }
 
   async function addMascota(mascota: MascotaCreateDto) {
     try {
@@ -56,5 +49,5 @@ export const useMascotaStore = defineStore("mascota", () => {
     }
   }
 
-  return { mascotas, fetchMascotas, fetchMascotasByCliente, addMascota, updateMascota, deleteMascota };
+  return { mascotas, fetchMascotas, addMascota, updateMascota, deleteMascota };
 });

@@ -3,7 +3,7 @@
     :visible="visible"
     @update:visible="$emit('update:visible', $event)"
     :header="header"
-    :style="{ width: '35rem' }"
+    :style="{ width: width }"
     :modal="true"
 
   >
@@ -20,6 +20,7 @@ import Dialog from "primevue/dialog";
 interface Props {
   visible: boolean;
   header: string;
+  width?: string;
 }
 
 defineProps<Props>();

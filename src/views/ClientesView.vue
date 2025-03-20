@@ -14,6 +14,7 @@
       :visible="modalVisible"
       :header="modalHeader"
       @update:visible="modalVisible = $event"
+       width="25rem"
     >
       <ClientForm
         v-if="modalMode === 'add' || modalMode === 'edit'"

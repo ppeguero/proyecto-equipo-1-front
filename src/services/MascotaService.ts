@@ -1,4 +1,4 @@
-import type { Mascota, MascotaCreateDto, MascotaUpdateDto } from "../interfaces/Mascota";
+import type { Consulta, Mascota, MascotaCreateDto, MascotaUpdateDto } from "../interfaces/Mascota";
 import { apiRequest } from "../utils/genericHttpRequest";
 
 export class MascotaService {
@@ -18,13 +18,21 @@ export class MascotaService {
     return response.data;
   }
 
-  async getByCliente(clienteId: number): Promise<Mascota[]> {
-    const response = await apiRequest<Mascota[]>({
+  async getHistorialCitas(id: number): Promise<Consulta[]> {
+    const response = await apiRequest<Consulta[]>({
       method: "get",
-      url: `/Mascotas/dueño/${clienteId}`,
+      url: `/Mascotas/${id}/historial-citas`,
     });
     return response.data;
   }
+
+  // async getByCliente(clienteId: number): Promise<Mascota[]> {
+  //   const response = await apiRequest<Mascota[]>({
+  //     method: "get",
+  //     url: `/Mascotas/dueño/${clienteId}`,
+  //   });
+  //   return response.data;
+  // }
 
   async create(mascota: MascotaCreateDto): Promise<Mascota> {
     const formData = new FormData();
