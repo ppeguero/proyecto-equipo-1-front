@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { useStorage } from '@vueuse/core';
+import { ref } from 'vue';
 
-const token = useStorage('token', '');
+//const token = useStorage('token', '');
+const token = ref('');
+token.value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBZG1pbmlzdHJhZG9yIiwibmJmIjoxNzQyNDMxMjc5LCJleHAiOjE3NDI0MzQ4NzksImlhdCI6MTc0MjQzMTI3OX0.stJcQSCi0zS6-U4UxDiWKqkyXNKCTGGhRegjGjxBWdA"
 
 const createAxiosInstance = (): AxiosInstance => {
   const baseURL = import.meta.env.VITE_API_BASE_URL as string;
