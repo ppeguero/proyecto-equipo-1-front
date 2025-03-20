@@ -14,12 +14,19 @@
       :visible="modalVisible"
       :header="modalHeader"
       @update:visible="modalVisible = $event"
+        :width="modalWidth" 
     >
       <PetForm
         v-if="modalMode === 'add' || modalMode === 'edit'"
         :pet="selectedPet"
         :clientes="clientes"
         ref="petForm"
+      />
+      <PetDetail
+        v-else-if="modalMode === 'detail'"
+        :pet="selectedPet"
+        @close="closeModal"
+
       />
       <div v-else-if="modalMode === 'delete'" class="text-center">
         <p>¿Estás seguro de que deseas eliminar esta mascota?</p>
@@ -55,13 +62,14 @@
       :clientes="clientes"
       @edit="openModal('edit', $event)"
       @delete="openModal('delete', $event)"
+      @detail="openModal('detail', $event)"
     />
     <Toast />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useMascotaStore } from '@/stores/mascotaStore';
 import { useClienteStore } from '@/stores/clienteStore';
 import { useToast } from 'primevue/usetoast';
@@ -72,6 +80,7 @@ import PetTable from '@/components/mascotas/PetTable.vue';
 import Toast from 'primevue/toast';
 import type { Mascota, MascotaCreateDto, MascotaUpdateDto } from '@/interfaces/Mascota';
 import { storeToRefs } from 'pinia';
+import PetDetail from '@/components/mascotas/PetDetail.vue';
 
 const mascotaStore = useMascotaStore();
 const clienteStore = useClienteStore();
@@ -83,11 +92,15 @@ const { clientes } = storeToRefs(clienteStore);
 const toast = useToast();
 
 const modalVisible = ref(false);
-const modalMode = ref<'add' | 'edit' | 'delete'>('add');
+const modalMode = ref<'add' | 'edit' | 'delete' | 'detail'>('add');
 const selectedPet = ref<Mascota | null>(null);
 const modalHeader = ref('');
 const petForm = ref<InstanceType<typeof PetForm> | null>(null);
 const isMobile = ref(false);
+
+const modalWidth = computed(() => {
+  return isMobile.value ? '90vw' : '45rem';
+});
 
 const checkMobile = () => {
   isMobile.value = window.matchMedia("(max-width: 768px)").matches;
@@ -104,13 +117,14 @@ onUnmounted(() => {
   window.removeEventListener('resize', checkMobile);
 });
 
-const openModal = (mode: 'add' | 'edit' | 'delete', pet?: Mascota) => {
+const openModal = (mode: 'add' | 'edit' | 'delete' | 'detail', pet?: Mascota) => {
   modalMode.value = mode;
   selectedPet.value = pet ? { ...pet } : null;
 
   if (mode === 'add') modalHeader.value = 'Agregar Paciente';
   else if (mode === 'edit') modalHeader.value = 'Editar Paciente';
   else if (mode === 'delete') modalHeader.value = 'Eliminar Paciente';
+  else if (mode === 'detail') modalHeader.value = 'Detalle del Paciente';
 
   modalVisible.value = true;
 };
@@ -127,7 +141,7 @@ const addPet = async () => {
         nombre: newPet.nombre,
         especie: newPet.especie,
         raza: newPet.raza,
-        fechaNacimiento: new Date(newPet.fechaNacimiento).toISOString().split('T')[0], // Formato "yyyy-MM-dd"
+        fechaNacimiento: new Date(newPet.fechaNacimiento).toISOString().split('T')[0],
         clienteId: Number(newPet.clienteId),
         imagenFile: petForm.value.files[0],
       };

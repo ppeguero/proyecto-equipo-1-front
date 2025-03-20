@@ -19,3 +19,14 @@ export type MascotaUpdateDto = Pick<Mascota, 'id' | 'nombre' | 'especie' | 'raza
   urlImagen?: string;
   imagenFile?: File;
 };
+
+export interface Consulta {
+  id: number;
+  fecha: string;
+  motivo: string;
+  estado: number;
+  mascotaId: number;
+  veterinarioId: number;
+  veterinarioNombre: string;
+  medicamentosIds: number[];
+}
