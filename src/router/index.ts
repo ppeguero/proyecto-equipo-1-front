@@ -7,9 +7,10 @@ import CitasView from '../views/CitasView.vue';
 import MascotasView from '../views/MascotasView.vue';
 import ClientesView from '../views/ClientesView.vue';
 import MedicamentosView from '../views/MedicamentosView.vue';
+import StartView from '@/views/StartView.vue';
+import LoginView from '../views/LoginView.vue';
 import { useStorage } from '@vueuse/core';
 import { jwtDecode } from 'jwt-decode';
-import LoginView from '../views/LoginView.vue';
 
 const token = useStorage('token', '');
 const isAuthenticated = () => !!token.value;
@@ -36,8 +37,8 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'login',
-      component: LoginView,
+      name: 'start',
+      component: StartView,
     },
     {
       path: '/dashboard',
@@ -86,7 +87,7 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue'),
+      component: LoginView,
     },
   ],
 });
@@ -94,23 +95,25 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!isAuthenticated()) {
-      next({ name: 'login' });
-    } else {
-      const requiredRole = to.meta.requiresRole as string | undefined;
-      if (requiredRole) {
-        const userRole = getUserRole();
-        if (userRole !== requiredRole) {
-          next({ name: 'dashboard' });
-        } else {
-          next();
-        }
-      } else {
-        next();
+      return next({ name: 'login' });
+    }
+
+    const requiredRole = to.meta.requiresRole as string | undefined;
+    if (requiredRole) {
+      const userRole = getUserRole();
+      if (userRole !== requiredRole) {
+        return next({ name: 'dashboard' });
       }
     }
-  } else {
-    next();
   }
+  
+  if (to.name === 'login' && isAuthenticated()) {
+    return next({ name: 'dashboard'
+    });
+  }
+
+
+  next();
 });
 
 export default router;
