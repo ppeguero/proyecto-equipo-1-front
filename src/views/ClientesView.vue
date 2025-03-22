@@ -14,7 +14,7 @@
       :visible="modalVisible"
       :header="modalHeader"
       @update:visible="modalVisible = $event"
-       width="25rem"
+       :width="modalWidth"
     >
       <ClientForm
         v-if="modalMode === 'add' || modalMode === 'edit'"
@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useClienteStore } from '@/stores/clienteStore';
 import { useToast } from 'primevue/usetoast';
 import Button from 'primevue/button';
@@ -85,6 +85,10 @@ const selectedCliente = ref<Partial<Cliente> | null>(null);
 const modalHeader = ref('');
 const clientForm = ref<InstanceType<typeof ClientForm> | null>(null);
 const isMobile = ref(false);
+
+const modalWidth = computed(() => {
+  return isMobile.value ? '90vw' : '35rem';
+});
 
 const checkMobile = () => {
   isMobile.value = window.matchMedia("(max-width: 768px)").matches;
@@ -111,6 +115,7 @@ const openModal = (mode: 'add' | 'edit' | 'delete', cliente?: Cliente) => {
 
   modalVisible.value = true;
 };
+
 
 const closeModal = () => {
   modalVisible.value = false;

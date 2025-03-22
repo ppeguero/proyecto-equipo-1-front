@@ -45,39 +45,25 @@ import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useStorage } from '@vueuse/core';
-import { authService } from '@/services/AuthService';
 
 const router = useRouter();
 const menu = ref();
 const position = ref('bottom-right');
-const refreshToken = useStorage('refreshToken', '');
 
 
 const props = defineProps<{
   isSidebarCollapsed: boolean;
 }>();
 
-const token = useStorage('token', '');
 
-const logout = async () => {
-  try {
-    await authService.logout(refreshToken.value);
-  } catch (error) {
-    console.error('Error al cerrar sesión:', error);
-  } finally {
-    token.value = '';
-        refreshToken.value = '';
-
-    router.push('/login');
-  }
-};
 
 const userMenuItems = [
   {
-    label: 'Cerrar sesión',
-    icon: 'pi pi-sign-out',
-    command: () => logout(),
+    label: 'Configurar perfil',
+    icon: 'pi pi-cog',
+    command: () => {
+      router.push('/dashboard/perfil');
+    },
   },
 ];
 </script>

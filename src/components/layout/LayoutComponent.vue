@@ -19,6 +19,7 @@
             : 'ml-[240px] w-[calc(100%-240px)]'
         ]"
       >
+      <Toast/>
         <router-view></router-view>
       </section>
     </main>
@@ -31,6 +32,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import HeaderComponent from '../shared/HeaderComponent.vue';
 import SidebarComponent from '../shared/SidebarComponent.vue';
+import Toast from 'primevue/toast';
 
 const isSidebarCollapsed = ref(true);
 const breakpoint = 1024;
