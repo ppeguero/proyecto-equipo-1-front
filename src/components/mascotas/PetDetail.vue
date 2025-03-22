@@ -85,9 +85,9 @@
       <Column field="estado" header="Estado" headerClass="bg-gray-100 text-center">
         <template #body="slotProps">
           <Tag
-            :value="getEstadoProps(slotProps.data.estado).label"
-            :severity="getEstadoProps(slotProps.data.estado).severity"
-            :class="getEstadoProps(slotProps.data.estado).tagClass"
+            :value="getEstadoProps(slotProps.data.estatus).label"
+            :severity="getEstadoProps(slotProps.data.estatus).severity"
+            :class="getEstadoProps(slotProps.data.estatus).tagClass"
             rounded
           />
         </template>
@@ -131,8 +131,8 @@ const formatDate = (dateString: string) => {
   return date.toLocaleDateString();
 };
 
-const getEstadoProps = (estado: number) => {
-   switch (estado) {
+const getEstadoProps = (estatus: number) => {
+   switch (estatus) {
     case 0:
       return { label: 'Pendiente', severity: 'warning', tagClass: 'tag-outlined-warning' };
     case 1:
