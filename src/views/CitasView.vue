@@ -10,14 +10,14 @@
 
     <TableCitas :citas="consultaStore.consultas" @editar="editarCita" @eliminar="eliminarCita" />
 
-    <ModalBase :visible="showModal" :header="editando ? 'Editar Cita' : 'Registrar Cita'" @update:visible="showModal = $event">
+    <ModalBase :visible="showModal" :header="editando ? 'Editar Cita' : 'Registrar Cita'" @update:visible="showModal = $event" :width="modalWidth">
       <CitasForm :visible="showModal" :citaData="citaActual" :isEditing="editando" @submit="guardarCita" @update:visible="showModal = $event" />
     </ModalBase>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed} from "vue";
 import { useConsultaStore } from "@/stores/useConsultaStore";
 import TableCitas from "@/components/citas/CitasTable.vue";
 import CitasForm from "@/components/citas/CitasForm.vue";
@@ -30,6 +30,11 @@ onMounted(() => consultaStore.fetchAllConsultas());
 const showModal = ref(false);
 const editando = ref(false);
 const citaActual = ref({ id: null, nombre: "", fecha: "", hora: "", estado: "0" });
+const isMobile = ref(false);
+
+const modalWidth = computed(() => {
+  return isMobile.value ? '90vw' : '45rem';
+});
 
 const abrirModal = () => {
   citaActual.value = { id: null, nombre: "", fecha: "", hora: "", estado: "0" };
@@ -45,9 +50,12 @@ const editarCita = (cita) => {
 
 const guardarCita = (cita) => {
   if (editando.value) {
+    console.log(cita);
     consultaStore.updateConsulta(cita.id, cita);
   } else {
-    consultaStore.addConsulta(cita);
+    console.log(cita);
+    consultaStore.createConsulta(cita);
+
   }
   showModal.value = false;
 };

@@ -2,7 +2,7 @@
   <div>
     <form @submit.prevent="handleSubmit">
       <div class="mb-4">
-        <label class="block text-gray-700">Nombre del Paciente</label>
+        <label class="block text-gray-700">Motivo</label>
         <InputText v-model="cita.motivo" class="w-full" required />
       </div>
       <div class="mb-4">
