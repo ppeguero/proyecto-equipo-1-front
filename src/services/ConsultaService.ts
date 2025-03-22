@@ -12,10 +12,20 @@ export interface Consulta {
   medicamentosIds: number[]
 }
 
-export interface ConsultaDto {
-  id?: number
+export interface ConsultaPostDto {
   fecha: string
   hora: string
+  estatus: number
+  motivo: string
+  mascotaId?: number
+  veterinarioId?: number
+}
+
+export interface ConsultaUpdateDto {
+  id: number
+  fecha: string
+  hora: string
+  estatus: number
   motivo: string
   mascotaId?: number
   veterinarioId?: number
@@ -31,16 +41,16 @@ export const consultaService = {
     return apiRequest<null, AxiosResponse<Consulta>>({ method: 'get', url: `/Consultas/${id}` })
   },
 
-  create: async (consultaDto: ConsultaDto): Promise<AxiosResponse<Consulta>> => {
-    return apiRequest<ConsultaDto, AxiosResponse<Consulta>>({
+  create: async (consultaDto: ConsultaPostDto): Promise<AxiosResponse<Consulta>> => {
+    return apiRequest<ConsultaPostDto, AxiosResponse<Consulta>>({
       method: 'post',
       url: '/Consultas',
       data: consultaDto,
     })
   },
 
-  update: async (id: number, consultaDto: ConsultaDto): Promise<AxiosResponse<void>> => {
-    return apiRequest<ConsultaDto, AxiosResponse<void>>({
+  update: async (id: number, consultaDto: ConsultaUpdateDto): Promise<AxiosResponse<void>> => {
+    return apiRequest<ConsultaUpdateDto, AxiosResponse<void>>({
       method: 'put',
       url: `/Consultas/${id}`,
       data: consultaDto,
