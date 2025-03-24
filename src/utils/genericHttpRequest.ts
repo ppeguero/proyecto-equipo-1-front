@@ -46,7 +46,7 @@ const createAxiosInstance = (): AxiosInstance => {
       if (error.response?.status === 401 && !ogRequest.retry) {
         ogRequest.retry = true;
 
-        if (refreshFailed) {
+        if (refreshFailed && !window.location.href.includes('/login')) {
           window.location.href = '/login';
           return Promise.reject(error);
         }
@@ -66,7 +66,7 @@ const createAxiosInstance = (): AxiosInstance => {
             refreshFailed = true;
             token.value = '';
             refreshToken.value = '';
-            window.location.href = '/login';
+            if (!window.location.href.includes('/login')) window.location.href = '/login';
             return Promise.reject(refreshError);
           }
         }
