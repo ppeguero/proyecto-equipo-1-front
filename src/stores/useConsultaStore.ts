@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { consultaService } from '@/services/ConsultaService';
-import type { Consulta, ConsultaDto } from '@/services/ConsultaService';
+import type { Consulta, ConsultaPostDto, ConsultaUpdateDto } from '@/services/ConsultaService';
 
 export const useConsultaStore = defineStore('consulta', () => {
     const consultas = ref<Consulta[]>([]);
@@ -37,7 +37,7 @@ export const useConsultaStore = defineStore('consulta', () => {
         }
     };
 
-    const createConsulta = async (consultaDto: ConsultaDto) => {
+    const createConsulta = async (consultaDto: ConsultaPostDto) => {
         loading.value = true;
         error.value = null;
         try {
@@ -50,7 +50,7 @@ export const useConsultaStore = defineStore('consulta', () => {
         }
     };
 
-    const updateConsulta = async (id: number, consultaDto: ConsultaDto) => {
+    const updateConsulta = async (id: number, consultaDto: ConsultaUpdateDto) => {
         loading.value = true;
         error.value = null;
         try {
