@@ -51,6 +51,12 @@ const router = createRouter({
           component: DashboardView,
         },
         {
+          path: 'perfil',
+          name: 'perfil',
+          component: () => import('../views/PerfilView.vue'),
+          meta: { requiresAuth: true },
+        },
+        {
           path: 'usuarios',
           name: 'usuarios',
           component: UsuariosView,
@@ -106,9 +112,10 @@ router.beforeEach((to, from, next) => {
       }
     }
   }
-  
+
   if (to.name === 'login' && isAuthenticated()) {
-    return next({ name: 'dashboard'
+    return next({
+      name: 'dashboard'
     });
   }
 
@@ -117,4 +124,3 @@ router.beforeEach((to, from, next) => {
 });
 
 export default router;
-
