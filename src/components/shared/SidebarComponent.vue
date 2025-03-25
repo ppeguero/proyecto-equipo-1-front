@@ -11,7 +11,6 @@
         <img :src="Logo" alt="Logo" class="h-30 w-auto" />
       </div>
 
-      <!-- Menú de navegación -->
       <nav class="flex-grow w-full">
         <ul class="flex flex-col gap-3 w-full">
           <li v-for="item in filteredMenuItems" :key="item.path" class="w-full">

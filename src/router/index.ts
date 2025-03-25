@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LayoutComponent from '../components/layout/LayoutComponent.vue';
-import DashboardView from '../views/DashboardView.vue';
+import DashboardView from '../views/Dashboards/DashboardAdminView.vue';
 import UsuariosView from '../views/UsuariosView.vue';
 import CitasView from '../views/CitasView.vue';
 import MascotasView from '../views/MascotasView.vue';
