@@ -14,7 +14,7 @@
       :visible="modalVisible"
       :header="modalHeader"
       @update:visible="modalVisible = $event"
-        :width="modalWidth" 
+        :width="modalWidth"
     >
       <PetForm
         v-if="modalMode === 'add' || modalMode === 'edit'"
@@ -29,7 +29,7 @@
 
       />
       <div v-else-if="modalMode === 'delete'" class="text-center">
-        <p>¿Estás seguro de que deseas eliminar esta mascota?</p>
+        <p>¿Estás seguro de que deseas eliminar esta mascota? <br /> Se eliminarán las mascotas asociadas.</p>
       </div>
 
       <template #footer>

@@ -11,7 +11,6 @@
         <img :src="Logo" alt="Logo" class="h-30 w-auto" />
       </div>
 
-      <!-- Menú de navegación -->
       <nav class="flex-grow w-full">
         <ul class="flex flex-col gap-3 w-full">
           <li v-for="item in filteredMenuItems" :key="item.path" class="w-full">
@@ -87,7 +86,6 @@ const logout = async () => {
 const baseMenuItems = [
   { label: 'Inicio', icon: 'pi pi-home', path: '/dashboard' },
   { label: 'Usuarios', icon: 'pi pi-users', path: '/dashboard/usuarios' },
-  { label: 'Roles', icon: 'pi pi-user-edit', path: '/dashboard/roles' },
   { label: 'Citas', icon: 'pi pi-calendar', path: '/dashboard/citas' },
   { label: 'Clientes', icon: 'pi pi-briefcase', path: '/dashboard/clientes' },
   { label: 'Mascotas', icon: 'pi pi-github', path: '/dashboard/mascotas' },

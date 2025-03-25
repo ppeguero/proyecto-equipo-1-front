@@ -23,7 +23,7 @@
       />
       <div v-else-if="modalMode === 'delete'" class="text-center">
         <p>
-          ¿Estás seguro de que deseas eliminar este cliente? Esto también eliminará todas sus mascotas asociadas.
+          ¿Estás seguro de que deseas eliminar este cliente? Esto también eliminará todas sus mascotas con sus consultas asociadas.
         </p>
       </div>
 
