@@ -11,7 +11,7 @@
       <small v-if="errors.nombre" class="p-error">{{ errors.nombre }}</small>
     </div>
     <div class="flex flex-col gap-1">
-      <label  class="font-semibold">Especie</label>
+      <label  class="font-semibold">Información personal</label>
       <InputText
         v-model="localCliente.apellido"
         placeholder="Apellido"

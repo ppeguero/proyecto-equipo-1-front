@@ -3,6 +3,15 @@ import type { AxiosResponse } from 'axios';
 import type { UsuarioDto } from '@/interfaces/UsuarioDto';
 
 export const usuarioService = {
+  getAll: async (): Promise<UsuarioDto[]> => {
+    const response = await apiRequest<null, AxiosResponse<UsuarioDto[]>>({
+      method: 'get',
+      url: '/Usuarios',
+      config: { addToken: true },
+    });
+    return response.data;
+  },
+
   getById: async (id: number): Promise<UsuarioDto> => {
     const response = await apiRequest<null, AxiosResponse<UsuarioDto>>({
       method: 'get',
