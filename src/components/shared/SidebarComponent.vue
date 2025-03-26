@@ -88,11 +88,11 @@ const logout = async () => {
   }
 };
 
-const verifyRole = (role: string) => {
+const verifyRole = (role: string[]) => {
   if (token.value){
     try {
       const decoded = jwtDecode<JwtPayload>(token.value);
-      return decoded.role === role;
+      return role.includes(decoded.role);
     } catch (error) {
       console.error('Error decodificando el token:', error);
       return false;
@@ -103,11 +103,11 @@ const verifyRole = (role: string) => {
 
 const baseMenuItems = [
   { label: 'Inicio', icon: 'pi pi-home', path: '/dashboard', show: true },
-  { label: 'Usuarios', icon: 'pi pi-users', path: '/dashboard/usuarios', show: verifyRole('Administrador') },
+  { label: 'Usuarios', icon: 'pi pi-users', path: '/dashboard/usuarios', show: verifyRole(['Administrador']) },
   { label: 'Citas', icon: 'pi pi-calendar', path: '/dashboard/citas', show: true },
   { label: 'Clientes', icon: 'pi pi-briefcase', path: '/dashboard/clientes', show: true },
   { label: 'Mascotas', icon: 'pi pi-github', path: '/dashboard/mascotas', show: true },
-  { label: 'Medicamentos', icon: 'pi pi-cart-plus', path: '/dashboard/medicamentos', show: true },
+  { label: 'Medicamentos', icon: 'pi pi-cart-plus', path: '/dashboard/medicamentos', show: verifyRole(['Veterinario', 'Administrador']) },
 ];
 
 const filteredMenuItems = computed(() => baseMenuItems);
