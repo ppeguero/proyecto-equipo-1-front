@@ -7,7 +7,7 @@ import CitasForm from '@/components/citas/CitasForm.vue'
 import ModalBase from '@/components/commons/ModalBase.vue'
 import Button from 'primevue/button'
 import CitaDetail from '@/components/citas/CitaDetail.vue'
-import { useToast } from 'primevue/useToast'
+import { useToast } from 'primevue/usetoast'
 import Toast from 'primevue/toast'
 
 const consultaStore = useConsultaStore()
