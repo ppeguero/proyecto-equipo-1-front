@@ -124,7 +124,7 @@ onBeforeMount(async () => {
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-2xl font-bold">Dashboard de Citas</h1>
       <Button
-        :label="isMobile ? '' : 'Agregar Cliente'"
+        :label="isMobile ? '' : 'Nueva Cita'"
         :icon="isMobile ? 'pi pi-plus' : ''"
         @click="abrirModal()"
         class="custom-primary-button"
