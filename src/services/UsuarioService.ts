@@ -46,4 +46,22 @@ export const usuarioService = {
       config: { addToken: true },
     });
   },
+
+  updateAdmin: async (id: number, usuario: UsuarioDto): Promise<void> => {
+    await apiRequest<UsuarioDto, AxiosResponse<void>>({
+      method: 'put',
+      url: `/Usuarios/${id}/admin`,
+      data: usuario,
+      config: { addToken: true },
+    });
+  },  
+
+  create: async (usuario: UsuarioDto): Promise<void> => {
+    await apiRequest<UsuarioDto, AxiosResponse<void>>({
+      method: 'post',
+      url: '/Usuarios',
+      data: usuario,
+      config: { addToken: true },
+    });
+  },
 };

@@ -20,7 +20,6 @@
         v-if="modalMode === 'add' || modalMode === 'edit' || modalMode === 'changePassword'"
         :usuario="selectedUsuario"
         :rolesDisponibles="roles"
-        :changePassword="modalMode === 'changePassword'"
         ref="usuarioForm"
       />
       <div v-else-if="modalMode === 'delete'" class="text-center">
@@ -143,9 +142,10 @@ const addUsuario = async () => {
     const isValid = await usuarioForm.value.validateForm();
     if (isValid) {
       const usuario = usuarioForm.value.localUsuario;
-      await usuarioStore.addUsuario(usuario);
+      await usuarioStore.addUser(usuario);
       closeModal();
-      toast.add({ severity: 'success', summary: 'Éxito', detail: 'Usuario agregado correctamente' });
+      await getAllUsuarios();
+      toast.add({ severity: 'success', summary: 'Éxito', detail: 'Usuario agregado correctamente', life: 3000 });
     }
   }
 };
@@ -154,9 +154,10 @@ const editUsuario = async () => {
     const isValid = await usuarioForm.value.validateForm();
     if (isValid) {
       const usuario = usuarioForm.value.localUsuario;
-      await usuarioStore.updateUsuario(usuario);
+      await usuarioStore.updateUserAdmin(usuarioForm.value.localUsuario.id, usuario);
+      await getAllUsuarios();
       closeModal();
-      toast.add({ severity: 'success', summary: 'Éxito', detail: 'Usuario actualizado correctamente' });
+      toast.add({ severity: 'success', summary: 'Éxito', detail: 'Usuario actualizado correctamente', life: 3000 });
     }
   }
 };

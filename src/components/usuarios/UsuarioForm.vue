@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col gap-4 w-full" v-if="!changePassword">
+    <div class="flex flex-col gap-4 w-full" >
       <div class="flex flex-col gap-1">
         <label class="font-semibold">Nombre</label>
         <InputText
@@ -33,7 +33,7 @@
         <small v-if="errors.email" class="p-error">{{ errors.email }}</small>
       </div>
   
-      <div v-if="!props.usuario?.id" class="flex flex-col gap-1">
+      <div v-if="!props.usuario?.id || changePassword" class="flex flex-col gap-1">
         <label class="font-semibold">Contraseña</label>
         <Password
           v-model="localUsuario.password"
@@ -45,7 +45,7 @@
         <small v-if="errors.password" class="p-error">{{ errors.password }}</small>
       </div>
   
-      <div v-if="!props.usuario?.id" class="flex flex-col gap-1">
+      <div v-if="!props.usuario?.id || changePassword" class="flex flex-col gap-1">
         <label class="font-semibold">Confirmar Contraseña</label>
         <Password
           v-model="localUsuario.confirmPassword"
@@ -57,48 +57,44 @@
         <small v-if="errors.confirmPassword" class="p-error">{{ errors.confirmPassword }}</small>
       </div>
   
-      <div class="flex flex-col gap-1">
+      <div class="flex flex-col gap-1" v-if="notAdmin">
         <label class="font-semibold">Roles</label>
-        <MultiSelect
-          v-model="localUsuario.roles"
-          :options="rolesDisponibles.map((rol) => (rol.nombre))"
-          placeholder="Seleccione los roles"
-          :class="{ 'p-invalid': errors.roles }"
+        <Select
+          v-model="localUsuario.rolId"
+          :options="props.rolesDisponibles"
+          optionLabel="nombre"
+          optionValue="id"
+          placeholder="Seleccione un rol"
+          :class="{ 'p-invalid': errors.rolId }"
           class="custom-input"
         />
-        <small v-if="errors.roles" class="p-error">{{ errors.roles }}</small>
+
+        <small v-if="errors.rolId" class="p-error">{{ errors.rolId }}</small>
       </div>
-    </div>
-    <div class="flex flex-col gap-4 w-full" v-else>
-      <label class="font-semibold">Nueva Contraseña</label>
-      <Password
-        v-model="localUsuario.password"
-        placeholder="Ingrese la nueva contraseña"
-        toggleMask
-        :class="{ 'p-invalid': errors.password }"
-        class="custom-input"
-      />
-      <small v-if="errors.password" class="p-error">{{ errors.password }}</small>
-      <label class="font-semibold">Confirmar Contraseña</label>
-      <Password
-        v-model="localUsuario.confirmPassword"
-        placeholder="Confirme la nueva contraseña"
-        toggleMask
-        :class="{ 'p-invalid': errors.confirmPassword }"
-        class="custom-input"
-      />
-      <small v-if="errors.confirmPassword" class="p-error">{{ errors.confirmPassword }}</small>
+
+      <div v-if="props.usuario?.id" class="flex items-center gap-2">
+      <Checkbox v-model="changePassword" binary/>
+      <label class="font-semibold cursor-pointer">
+        Cambiar contraseña
+      </label>
+</div>
+
     </div>
   </template>
   
   <script setup lang="ts">
-  import { ref, watch } from "vue";
+  import { ref, watch, computed } from "vue";
   import InputText from "primevue/inputtext";
   import Password from "primevue/password";
-  import MultiSelect from "primevue/multiselect";
+  import Select from "primevue/select";
+  import Checkbox from "primevue/checkbox";
   import * as Yup from "yup";
   import type { UsuarioUpdateDto } from "@/interfaces/UsuarioDto";
-  
+
+  const changePassword = ref(false);
+  const notAdmin = computed(() => {
+    return !props.usuario?.roles?.includes("Administrador");
+  });  
   interface UsuarioForm {
     id: number;
     nombre: string;
@@ -106,7 +102,7 @@
     email: string;
     password: string;
     confirmPassword?: string;
-    roles: string[];
+    rolId: string;
     consultasIds: number[];
   }
   
@@ -114,7 +110,6 @@
     usuario?: Partial<UsuarioUpdateDto>;
     rolesDisponibles: any;
     consultas: { id: number; nombre: string }[];
-    changePassword: boolean;
   }>();
   
   const localUsuario = ref<UsuarioForm>({
@@ -124,7 +119,7 @@
     email: "",
     password: "",
     confirmPassword: "",
-    roles: [],
+    rolId: "",
     consultasIds: [],
   });
   
@@ -146,7 +141,7 @@
         then: (schema) => schema.required("Debe confirmar la contraseña").oneOf([Yup.ref("password")], "Las contraseñas no coinciden"),
         otherwise: (schema) => schema
       }),
-    roles: Yup.array().min(1, "Debe seleccionar al menos un rol"),
+    rolId: Yup.string().required("Debe seleccionar al menos un rol"),
     } );
 
     const passwordSchema = Yup.object().shape({
@@ -193,34 +188,39 @@
   };  
   
   watch(
-    () => props.usuario,
-    (newUsuario) => {
-      if (newUsuario) {
-        localUsuario.value = {
-          id: newUsuario.id || 0,
-          nombre: newUsuario.nombre || "",
-          apellido: newUsuario.apellido || "",
-          email: newUsuario.email || "",
-          password: "",
-          confirmPassword: "",
-          roles: newUsuario.roles || [],
-          consultasIds: newUsuario.consultasIds || [],
-        };
-      } else {
-        localUsuario.value = {
-          id: 0,
-          nombre: "",
-          apellido: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-          roles: [],
-          consultasIds: [],
-        };
-      }
-    },
-    { immediate: true }
-  );
+  () => props.usuario,
+  (newUsuario) => {
+    if (newUsuario) {
+      const rolEncontrado = props.rolesDisponibles.find(
+        (rol: { nombre: string }) => rol.nombre === newUsuario.roles?.[0]
+      );
+
+      localUsuario.value = {
+        id: newUsuario.id || 0,
+        nombre: newUsuario.nombre || "",
+        apellido: newUsuario.apellido || "",
+        email: newUsuario.email || "",
+        password: "",
+        confirmPassword: "",
+        rolId: rolEncontrado ? rolEncontrado.id : "",
+        consultasIds: newUsuario.consultasIds || [],
+      };
+    } else {
+      localUsuario.value = {
+        id: 0,
+        nombre: "",
+        apellido: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        rolId: "",
+        consultasIds: [],
+      };
+    }
+  },
+  { immediate: true }
+);
+
   
   defineExpose({
     localUsuario,

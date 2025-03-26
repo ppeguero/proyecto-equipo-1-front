@@ -26,13 +26,6 @@
                         @click="$emit('edit', data)"
                     />
                     <Button
-                        icon="pi pi-lock"
-                        class="p-button-rounded p-button-text"
-                        style="color: #000"
-                        :style="data.id == id ? 'display: none' : ''"
-                        @click="$emit('changePassword', data)"
-                    />
-                    <Button
                         icon="pi pi-trash"
                         class="p-button-rounded p-button-text"
                         style="color: #e53935"
@@ -51,7 +44,7 @@
 
 <script setup lang="ts">
 
-import { computed } from "vue";
+import { onMounted, ref } from "vue";
 import TableDataBase from "@/components/commons/TableDataBase.vue";
 import Column from "primevue/column";
 import Button from "primevue/button";
@@ -62,8 +55,10 @@ import type { RolDto } from '@/interfaces/RolDto';
 
 const usuarioStore = useUsuarioStore();
 
-const id = computed(() => usuarioStore.getDecodedToken()?.nameid || null);
-
+const id = ref<string | null>(null);
+onMounted(() => {
+    id.value = usuarioStore.getDecodedToken()?.nameid ?? null;
+});
 defineProps<{
     usuarios: UsuarioDto[];
     roles: RolDto[];

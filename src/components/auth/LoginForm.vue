@@ -15,14 +15,21 @@
                 />
                 <span v-if="errors.email" class="text-red-500 text-sm">{{ errors.email }}</span>
             </div>
-            <div class="flex flex-col gap-1">
+            <div class="flex flex-col gap-1 relative">
                 <label class="text-white uppercase font-semibold" for="password">Contraseña</label>
-                <InputText 
-                    type="password" 
-                    name="password"
-                    class="custom-input"
-                    v-model="password"
-                />
+                <div class="relative">
+                    <InputText 
+                        :type="passwordVisible ? 'text' : 'password'" 
+                        name="password"
+                        class="custom-input w-full pr-10"
+                        v-model="password"
+                    />
+                    <i 
+                        :class="passwordVisible ? 'pi pi-eye-slash' : 'pi pi-eye'" 
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+                        @click="togglePasswordVisibility"
+                    ></i>
+                </div>
                 <span v-if="errors.password" class="text-red-500 text-sm">{{ errors.password }}</span>
             </div>
         </div>
@@ -37,25 +44,22 @@
 </template>
 
 <script setup lang="ts">
-
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import ProgressSpinner from "primevue/progressspinner";
 
 import * as Yup from "yup";
-
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { authService } from '@/services/AuthService';
 import { useStorage } from '@vueuse/core';
 
-
 const email = ref('');
 const password = ref('');
-const errors = ref<{ email?: string; password?: string }>({}); 
+const passwordVisible = ref(false); // Toggle password visibility
+const errors = ref<{ email?: string; password?: string }>({});
 const errorMessage = ref('');
 const router = useRouter();
-
 const isLoading = ref(false);
 
 const token = useStorage('token', '');
@@ -108,13 +112,22 @@ const handleLoginSubmit = async () => {
     }
 };
 
+// Function to toggle password visibility
+const togglePasswordVisibility = () => {
+    passwordVisible.value = !passwordVisible.value;
+};
 </script>
 
 <style scoped>
 .login-button {
     background-color: #043543;
 }
+
 .custom-input {
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.pi {
+    font-size: 1.2rem;
 }
 </style>
