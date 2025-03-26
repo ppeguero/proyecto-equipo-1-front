@@ -64,7 +64,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useClienteStore } from '@/stores/clienteStore';
-import { useToast } from 'primevue/usetoast';
+import { useToast } from 'primevue/useToast';
 import Button from 'primevue/button';
 import ModalBase from '@/components/commons/ModalBase.vue';
 import ClientForm from '@/components/clientes/ClientForm.vue';

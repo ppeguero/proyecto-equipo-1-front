@@ -56,7 +56,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useMedicamentoStore } from '@/stores/medicamentoStore';
-import { useToast } from 'primevue/usetoast';
+import { useToast } from 'primevue/useToast';
 import Button from 'primevue/button';
 import ModalBase from '@/components/commons/ModalBase.vue';
 import MedicamentosForm from '@/components/medicamentos/MedicamentosForm.vue';
