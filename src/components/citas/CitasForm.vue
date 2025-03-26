@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 import InputText from "primevue/inputtext";
 import Calendar from "primevue/calendar";
 import Dropdown from "primevue/dropdown";
@@ -11,6 +11,32 @@ import { useMedicamentoStore } from "@/stores/medicamentoStore";
 import { useConsultaStore } from "@/stores/useConsultaStore";
 import type { Consulta } from "@/services/ConsultaService";
 import type { Mascota } from "@/interfaces/Mascota";
+import { jwtDecode } from "jwt-decode";
+import { useStorage } from "@vueuse/core";
+
+const token = useStorage("token", "");
+const userEmail = ref<string | null>(null);
+const userRole = ref<string | null>(null);
+
+interface JwtPayload {
+  nameid: string;
+  email: string;
+  role: string;
+}
+
+const decodeToken = () => {
+  if (token.value) {
+    try {
+      const decoded = jwtDecode<JwtPayload>(token.value);
+      userEmail.value = decoded.email || null;
+      userRole.value = decoded.role || null;
+    } catch (error) {
+      console.error('Error decodificando el token:', error);
+      userEmail.value = null;
+      userRole.value = null;
+    }
+  }
+};
 
 const props = defineProps<{
   visible: boolean;
@@ -76,6 +102,7 @@ const horariosDisponibles = computed(() => {
 });
 
 const isLoading = ref(false);
+const mostrarMedicamentos = computed(() => cita.value.estatus === 2);
 
 const removeHTMLTags = (str: string) => str.replace(/<[^>]*>/g, '');
 
@@ -147,8 +174,7 @@ const handleSubmit = async () => {
       medicamentosIds: [...(cita.value.medicamentosIds || [])],
     };
 
-
-    if (cita.value.medicamentosIds.length > 0) {
+    if (mostrarMedicamentos.value && cita.value.medicamentosIds.length > 0) {
       isLoading.value = true;
       for (const medicamentoId of cita.value.medicamentosIds) {
         await consultaStore.assignMedicamento(cita.value.id, medicamentoId);
@@ -160,6 +186,12 @@ const handleSubmit = async () => {
     emit("update:visible", false);
   }
 };
+
+const isRecepcionista = computed(() => userRole.value === "Recepcionista");
+
+onMounted(() => {
+  decodeToken();
+});
 </script>
 
 <template>
@@ -186,8 +218,7 @@ const handleSubmit = async () => {
         <Dropdown v-model="cita.estatus" :options="estatusOpciones" optionLabel="label" optionValue="value" class="w-full" required />
       </div>
 
-      <!-- Selector de Medicamentos (Solo en edición) -->
-      <div class="mb-4" v-if="props.isEditing">
+      <div class="mb-4" v-if="(mostrarMedicamentos &&  !isRecepcionista)">
         <label class="block text-gray-700">Medicamentos</label>
         <MultiSelect
           v-model="cita.medicamentosIds"
@@ -199,7 +230,6 @@ const handleSubmit = async () => {
         />
       </div>
 
-      <!-- Indicador de Carga -->
       <div v-if="isLoading" class="absolute inset-0 flex justify-center items-center bg-[#fff] bg-opacity-50 z-50">
         <ProgressSpinner style="width: 50px; height: 50px;" />
       </div>
