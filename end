@@ -1,0 +1,72 @@
+[33mb35eca3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mDashboards[m[33m, [m[1;31morigin/citas[m[33m)[m hot fix
+[33m3c63b77[m citas
+[33m7194b6c[m citas
+[33m2fe6e54[m merge main con citas
+[33m6fee521[m Merge branch 'main' into citas
+[33md366640[m se termina citas y vistas de dashboard por roles
+[33m753df56[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #17 from ppeguero/feat/crud-usuarios
+[33mc7595d0[m[33m ([m[1;31morigin/feat/crud-usuarios[m[33m)[m feat: se finaliza CRUD de usuarios
+[33m7067d5d[m fix: cambio en la logica del show en sidebar
+[33md941d4b[m feat: se termina con form
+[33m2929d79[m[33m ([m[1;32mfeat/crud-usuarios[m[33m)[m Merge branch 'main' into feat/crud-usuarios
+[33md376d15[m feat: crud de usuarios
+[33me4d1f0f[m Merge pull request #16 from ppeguero/Dashboards
+[33m0185944[m[33m ([m[1;31morigin/Dashboards[m[33m)[m agregando dashboard administrativo con chartjs
+[33m22ba793[m Merge pull request #15 from ppeguero/feat/auth-login
+[33m23929ee[m Merge pull request #14 from ppeguero/citas
+[33macc2a0b[m Merge pull request #13 from ppeguero/RefreshToken
+[33m6c4f8ee[m[33m ([m[1;31morigin/feat/auth-login[m[33m)[m feat: login
+[33mcb207dc[m se termina front de citas
+[33mdef08b7[m[33m ([m[1;31morigin/RefreshToken[m[33m)[m configuracion de perfil
+[33m6644533[m Merge branch 'main' into citas
+[33mf42eee8[m citas form
+[33m5565308[m Merge pull request #12 from ppeguero/feat/start
+[33mcf5640c[m[33m ([m[1;31morigin/feat/start[m[33m)[m feat: componente start
+[33mc046865[m[33m ([m[1;32mmain[m[33m)[m Merge pull request #11 from ppeguero/Refreshtoken
+[33m980dc10[m Merge branch 'Refreshtoken' of https://github.com/ppeguero/proyecto-equipo-1-front into Refreshtoken
+[33mb289e1e[m Merge pull request #10 from ppeguero/citas
+[33m7ba1c62[m Merge branch 'citas' into Refreshtoken
+[33m7fb01e0[m modal detalle de mascota, servicio historial de citas props en modal base para el ancho
+[33mc6751a7[m fix tremendo bug infinito de errores authorize solucionado xD
+[33m659443c[m lgoout en sidebar y header
+[33mcf2c1cf[m agregando routerBeforeeach provisional
+[33mcd51398[m implmentacion service refreshtoken
+[33m6da34d9[m se usan modalbase
+[33m3c523b0[m Merge pull request #9 from ppeguero/beta2.0
+[33mf00a5f0[m[33m ([m[1;31morigin/beta2.0[m[33m)[m 		#	modified:   src/views/MascotasView.vue
+[33mf47def6[m se suben cambios de citas
+[33m0798324[m creacion del store de citas
+[33m51c1d2f[m Merge remote-tracking branch 'origin/main' into beta2.0
+[33m960623b[m actualizacion dependencias
+[33m176b2d9[m Merge pull request #8 from ppeguero/Ramaedu1
+[33ma17d2f7[m[33m ([m[1;31morigin/Ramaedu1[m[33m, [m[1;32mRamaedu1[m[33m)[m medicamentos
+[33m172d42d[m[33m ([m[1;32mbeta2.0[m[33m)[m limpiando archivos
+[33m11ffec7[m funcionalidad cliente y mascotas con beta2.0 del back
+[33m8f246d1[m Merge branch 'main' into citas
+[33mfe0333e[m Merge branch 'jose' of https://github.com/ppeguero/proyecto-equipo-1-front into jose
+[33m3b9be3c[m[33m ([m[1;31morigin/jose[m[33m, [m[1;32mjose[m[33m)[m vista medicamentos
+[33m2429f17[m Merge branch 'main' into jose
+[33me4a82e6[m Merge pull request #7 from ppeguero/feat/api
+[33ma48ccab[m[33m ([m[1;31morigin/feat/api[m[33m)[m feat: añade servicio autenticacion y funcion generica HTTP
+[33mdd32b3b[m fix header, cambios generales
+[33m10140a8[m agregando vista de pech
+[33m9b27902[m add layout, sidebar, header mascotas estaticas, modal y tabla primevue generico
+[33m3829125[m estilos de tabla mejorados
+[33m07572bb[m hotfix modal
+[33ma40f0ff[m se sube vista de citas
+[33m77be36d[m Merge pull request #6 from ppeguero/SF
+[33m1fbdd6a[m Edwin Alejandro Sanchez Fernandez
+[33m315471d[m Merge pull request #4 from ppeguero/Blxckbxll24-patch-1
+[33m16c744d[m Merge branch 'main' into Blxckbxll24-patch-1
+[33mb66a931[m Merge pull request #5 from ppeguero/patch-1
+[33m1da4ec0[m Update README.md
+[33mf5a1a7c[m Update README.md
+[33m35549bc[m Update README.md
+[33m33f3c7b[m Merge pull request #3 from ppeguero/JoseMtz02-patch-1
+[33mbaa96a3[m commit Update README.md
+[33m88d57bc[m Merge pull request #2 from ppeguero/ppeguero-patch-1
+[33m443ae12[m Update README.md
+[33mdf621d0[m Merge pull request #1 from ppeguero/feat/readme
+[33m0297507[m feat: se añaden librerias y readme
+[33mec4b7d1[m feat: se añaden librerias y readme
+[33me9bff64[m feat: first commit
