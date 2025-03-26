@@ -54,7 +54,6 @@ const cards = computed(() => [
 ]);
 
 const filteredCards = computed(() => cards.value.filter((card) => card.value > 0));
-console.log('filtro',cards);
 
 const navigateTo = (route: string) => {
   router.push(route);

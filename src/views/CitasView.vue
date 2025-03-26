@@ -64,12 +64,10 @@ const editarCita = (cita) => {
 const guardarCita = async (cita) => {
   try {
     if (editando.value) {
-      console.log('Actualizando cita:', cita)
 
       await consultaStore.updateConsulta(cita.id, cita)
-      toast.add({ severity: 'success', summary: 'Éxito', detail: 'Cita actualizada correctamente', life: 3000 }) 
+      toast.add({ severity: 'success', summary: 'Éxito', detail: 'Cita actualizada correctamente', life: 3000 })
     } else {
-      console.log('Creando nueva cita:', cita)
       await consultaStore.createConsulta(cita)
       toast.add({ severity: 'success', summary: 'Éxito', detail: 'Cita registrada correctamente', life: 3000 })
     }
@@ -86,7 +84,6 @@ const verDetallesCita = (cita) => {
 }
 
 const mostrarModalConfirmacionEliminacion = (cita) => {
-  console.log('Cita a eliminar:', cita)
 
   if (cita) {
     citaAEliminar.value = cita
