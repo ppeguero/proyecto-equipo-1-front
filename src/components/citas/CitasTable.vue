@@ -24,7 +24,7 @@
 
     <Column header="Nombre del Paciente" class="w-64">
       <template #body="{ data }">
-        <button @click="$emit('verDetalles', data)" class="text-blue-600 hover:underline w-full text-center">
+        <button @click="$emit('verDetalles', data)" class="hover:underline w-full text-center cursor-pointer">
           {{ mascotasNombres[data.mascotaId] || "Cargando..." }}
         </button>
       </template>
@@ -58,16 +58,19 @@
           <Button
             icon="pi pi-eye"
             class="p-button-rounded p-button-text text-blue-500"
+          style="color: #008040"
             @click="$emit('verDetalles', data)"
           />
           <Button
             icon="pi pi-pencil"
             class="p-button-rounded p-button-text text-blue-500"
+             style="color: #1e88e5"
             @click="$emit('editar', data)"
           />
           <Button
             icon="pi pi-trash"
             class="p-button-rounded p-button-text text-red-500"
+            style="color: #e53935"
             @click="$emit('eliminar', data.id)"
           />
         </div>
