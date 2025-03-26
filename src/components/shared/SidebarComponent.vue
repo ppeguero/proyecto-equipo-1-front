@@ -19,7 +19,7 @@
                 variant="text"
                 :style="{
                   color: '#375993',
-                  display: 'flex',
+                  display: item.show ? 'flex' : 'none',
                   width: '100%',
                   justifyContent: isCollapsed ? 'center' : 'flex-start',
                   padding: '1.5vh'
@@ -63,12 +63,17 @@ import Button from 'primevue/button';
 import Logo from '@/assets/img/logo.png';
 import { useStorage } from '@vueuse/core';
 import { authService } from '@/services/AuthService';
+import { jwtDecode } from 'jwt-decode';
 
 const router = useRouter();
 const props = defineProps<{ isCollapsed: boolean }>();
 
 const token = useStorage('token', '');
 const refreshToken = useStorage('refreshToken', '');
+
+interface JwtPayload {
+  role: string;
+}
 
 const logout = async () => {
   try {
@@ -83,13 +88,26 @@ const logout = async () => {
   }
 };
 
+const verifyRole = (role: string[]) => {
+  if (token.value){
+    try {
+      const decoded = jwtDecode<JwtPayload>(token.value);
+      return role.includes(decoded.role);
+    } catch (error) {
+      console.error('Error decodificando el token:', error);
+      return false;
+    }
+  }
+  return false;
+};
+
 const baseMenuItems = [
-  { label: 'Inicio', icon: 'pi pi-home', path: '/dashboard' },
-  { label: 'Usuarios', icon: 'pi pi-users', path: '/dashboard/usuarios' },
-  { label: 'Citas', icon: 'pi pi-calendar', path: '/dashboard/citas' },
-  { label: 'Clientes', icon: 'pi pi-briefcase', path: '/dashboard/clientes' },
-  { label: 'Mascotas', icon: 'pi pi-github', path: '/dashboard/mascotas' },
-  { label: 'Medicamentos', icon: 'pi pi-cart-plus', path: '/dashboard/medicamentos' },
+  { label: 'Inicio', icon: 'pi pi-home', path: '/dashboard', show: true },
+  { label: 'Usuarios', icon: 'pi pi-users', path: '/dashboard/usuarios', show: verifyRole(['Administrador']) },
+  { label: 'Citas', icon: 'pi pi-calendar', path: '/dashboard/citas', show: true },
+  { label: 'Clientes', icon: 'pi pi-briefcase', path: '/dashboard/clientes', show: true },
+  { label: 'Mascotas', icon: 'pi pi-github', path: '/dashboard/mascotas', show: true },
+  { label: 'Medicamentos', icon: 'pi pi-cart-plus', path: '/dashboard/medicamentos', show: verifyRole(['Veterinario', 'Administrador']) },
 ];
 
 const filteredMenuItems = computed(() => baseMenuItems);
