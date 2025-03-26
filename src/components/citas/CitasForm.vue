@@ -83,7 +83,7 @@ const citaSchema = Yup.object().shape({
   motivo: Yup.string()
     .test("no-html", "El motivo no puede contener etiquetas HTML.", (value) => {
       if (value) {
-        return !/<[^>]*>/g.test(value); 
+        return !/<[^>]*>/g.test(value);
       }
       return true;
     })
@@ -131,7 +131,7 @@ watch(
   { immediate: true }
 );
 
-const handleSubmit = async () => {\
+const handleSubmit = async () => {
   cita.value.motivo = removeHTMLTags(cita.value.motivo);
 
   const valid = await validateForm();
