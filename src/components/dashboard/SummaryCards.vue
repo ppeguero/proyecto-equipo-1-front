@@ -26,7 +26,6 @@ const props = defineProps<{
   data: SummaryData;
 }>();
 
-// Tarjetas originales
 const cards = computed(() => [
   {
     label: 'Citas',
@@ -54,7 +53,6 @@ const cards = computed(() => [
   },
 ]);
 
-// Filtrar tarjetas que no tengan valor o sean cero
 const filteredCards = computed(() => cards.value.filter((card) => card.value > 0));
 console.log('filtro',cards);
 

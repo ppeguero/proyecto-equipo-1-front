@@ -33,8 +33,8 @@ const mostrarDetalle = ref(false)
 const citaSeleccionada = ref(null)
 const isMobile = ref(false)
 
-const showConfirmDeleteModal = ref(false) // Variable para controlar el modal de confirmación de eliminación
-const citaAEliminar = ref(null) // Cita seleccionada para eliminar
+const showConfirmDeleteModal = ref(false)
+const citaAEliminar = ref(null)
 
 const modalWidth = computed(() => {
   return isMobile.value ? '90vw' : '45rem'
@@ -67,16 +67,16 @@ const guardarCita = async (cita) => {
       console.log('Actualizando cita:', cita)
 
       await consultaStore.updateConsulta(cita.id, cita)
-      toast.add({ severity: 'success', summary: 'Éxito', detail: 'Cita actualizada correctamente', life: 3000 })  // Mostrar toast de éxito
+      toast.add({ severity: 'success', summary: 'Éxito', detail: 'Cita actualizada correctamente', life: 3000 }) 
     } else {
       console.log('Creando nueva cita:', cita)
       await consultaStore.createConsulta(cita)
-      toast.add({ severity: 'success', summary: 'Éxito', detail: 'Cita registrada correctamente', life: 3000 })  // Mostrar toast de éxito
+      toast.add({ severity: 'success', summary: 'Éxito', detail: 'Cita registrada correctamente', life: 3000 })
     }
     showModal.value = false
   } catch (error) {
     console.error('Error al guardar la cita:', error)
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Hubo un problema al guardar la cita', life: 3000 })  // Mostrar toast de error
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Hubo un problema al guardar la cita', life: 3000 })
   }
 }
 

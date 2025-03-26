@@ -5,17 +5,17 @@ import Calendar from "primevue/calendar";
 import Dropdown from "primevue/dropdown";
 import MultiSelect from "primevue/multiselect";
 import Button from "primevue/button";
-import ProgressSpinner from "primevue/progressspinner"; // Importar el componente de carga
-import * as Yup from "yup"; // Importar Yup para la validación
+import ProgressSpinner from "primevue/progressspinner";
+import * as Yup from "yup";
 import { useMedicamentoStore } from "@/stores/medicamentoStore";
-import { useConsultaStore } from "@/stores/useConsultaStore"; // Importar el store de consultas
+import { useConsultaStore } from "@/stores/useConsultaStore";
 import type { Consulta } from "@/services/ConsultaService";
 import type { Mascota } from "@/interfaces/Mascota";
 
 const props = defineProps<{
   visible: boolean;
   citaData?: Consulta;
-  isEditing: boolean; // Importante para saber si estamos editando o creando
+  isEditing: boolean;
   mascotas: Mascota[];
   citasExistentes?: Consulta[];
 }>();
@@ -26,7 +26,7 @@ const emit = defineEmits<{
 }>();
 
 const medicamentoStore = useMedicamentoStore();
-const consultaStore = useConsultaStore(); // Obtener el store de consultas
+const consultaStore = useConsultaStore();
 const medicamentosDisponibles = computed(() => medicamentoStore.medicamentos);
 
 const estatusOpciones = [
@@ -75,17 +75,15 @@ const horariosDisponibles = computed(() => {
   return generarHorarios().filter((hora) => !horariosOcupados.includes(hora));
 });
 
-// Estado de carga
 const isLoading = ref(false);
 
-// Validación con Yup y regex para evitar etiquetas HTML
-const removeHTMLTags = (str: string) => str.replace(/<[^>]*>/g, ''); // Elimina etiquetas HTML
+const removeHTMLTags = (str: string) => str.replace(/<[^>]*>/g, '');
 
 const citaSchema = Yup.object().shape({
   motivo: Yup.string()
     .test("no-html", "El motivo no puede contener etiquetas HTML.", (value) => {
       if (value) {
-        return !/<[^>]*>/g.test(value); // Detecta si hay etiquetas HTML
+        return !/<[^>]*>/g.test(value); 
       }
       return true;
     })
@@ -122,10 +120,9 @@ watch(
       cita.value = {
         ...newData,
         fecha: newData.fecha ? new Date(newData.fecha) : new Date(),
-        medicamentosIds: [...(newData.medicamentosIds || [])], // Evita referencias directas
+        medicamentosIds: [...(newData.medicamentosIds || [])],
       };
 
-      // Cargar medicamentos solo si estamos editando
       if (props.isEditing) {
         await medicamentoStore.fetchMedicamentos();
       }
@@ -134,8 +131,7 @@ watch(
   { immediate: true }
 );
 
-const handleSubmit = async () => {
-  // Limpiar el motivo de cualquier etiqueta HTML antes de enviar
+const handleSubmit = async () => {\
   cita.value.motivo = removeHTMLTags(cita.value.motivo);
 
   const valid = await validateForm();
@@ -148,16 +144,16 @@ const handleSubmit = async () => {
       motivo: cita.value.motivo,
       mascotaId: cita.value.mascotaId,
       veterinarioId: cita.value.veterinarioId,
-      medicamentosIds: [...(cita.value.medicamentosIds || [])], // Asegura que siempre haya un array
+      medicamentosIds: [...(cita.value.medicamentosIds || [])],
     };
 
-    // Si hay medicamentos asignados, asignarlos a la consulta
+
     if (cita.value.medicamentosIds.length > 0) {
-      isLoading.value = true; // Activar el loading
+      isLoading.value = true;
       for (const medicamentoId of cita.value.medicamentosIds) {
         await consultaStore.assignMedicamento(cita.value.id, medicamentoId);
       }
-      isLoading.value = false; // Desactivar el loading
+      isLoading.value = false;
     }
 
     emit("submit", citaFormateada);
