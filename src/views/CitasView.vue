@@ -13,12 +13,6 @@ import Toast from 'primevue/toast'
 const consultaStore = useConsultaStore()
 const mascotaStore = useMascotaStore()
 const toast = useToast()
-
-onBeforeMount(async () => {
-  await consultaStore.fetchAllConsultas()
-  await mascotaStore.fetchMascotas()
-})
-
 const showModal = ref(false)
 const editando = ref(false)
 const citaActual = ref({
@@ -39,6 +33,10 @@ const citaAEliminar = ref(null)
 const modalWidth = computed(() => {
   return isMobile.value ? '90vw' : '45rem'
 })
+
+const checkMobile = () => {
+  isMobile.value = window.matchMedia("(max-width: 768px)").matches;
+};
 
 const mascotas = computed(() => mascotaStore.mascotas)
 
@@ -113,6 +111,12 @@ const eliminarCita = async () => {
 const cancelarEliminacion = () => {
   showConfirmDeleteModal.value = false
 }
+
+onBeforeMount(async () => {
+  await consultaStore.fetchAllConsultas()
+  await mascotaStore.fetchMascotas()
+  checkMobile();
+})
 </script>
 
 <template>
@@ -120,7 +124,8 @@ const cancelarEliminacion = () => {
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-2xl font-bold">Dashboard de Citas</h1>
       <Button
-        label="Registrar Cita"
+        :label="isMobile ? '' : 'Agregar Cliente'"
+        :icon="isMobile ? 'pi pi-plus' : ''"
         @click="abrirModal()"
         class="custom-primary-button"
       />
