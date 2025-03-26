@@ -20,16 +20,17 @@
             <template #body="{ data }" v-else-if="col.field === 'acciones'">
                 <div class="flex gap-2 justify-center">
                     <Button
-                        icon="pi pi-search"
-                        class="p-button-rounded p-button-text"
-                        style="color: #008040"
-                        @click="$emit('detail', data)"
-                    />
-                    <Button
                         icon="pi pi-pencil"
                         class="p-button-rounded p-button-text"
                         style="color: #1e88e5"
                         @click="$emit('edit', data)"
+                    />
+                    <Button
+                        icon="pi pi-lock"
+                        class="p-button-rounded p-button-text"
+                        style="color: #000"
+                        :style="data.id == id ? 'display: none' : ''"
+                        @click="$emit('changePassword', data)"
                     />
                     <Button
                         icon="pi pi-trash"
@@ -68,9 +69,10 @@ defineProps<{
     roles: RolDto[];
 }>();
 
-defineEmits(["edit", "delete", "detail"]);
+defineEmits(["edit", "delete", "detail", "changePassword"]);
 
 const columns = [
+    { field: 'id', header: 'ID', width: '15%'},
     { field: "nombre", header: "Nombre Usuario", width: "15%" },
     { field: "apellido", header: "Apellido", width: "15%" },
     { field: "email", header: "Email", width: "15%" },

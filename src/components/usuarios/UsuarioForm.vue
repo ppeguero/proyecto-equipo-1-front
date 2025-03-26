@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col gap-4 w-full">
+    <div class="flex flex-col gap-4 w-full" v-if="!changePassword">
       <div class="flex flex-col gap-1">
         <label class="font-semibold">Nombre</label>
         <InputText
@@ -61,13 +61,33 @@
         <label class="font-semibold">Roles</label>
         <MultiSelect
           v-model="localUsuario.roles"
-          :options="rolesDisponibles"
+          :options="rolesDisponibles.map((rol) => (rol.nombre))"
           placeholder="Seleccione los roles"
           :class="{ 'p-invalid': errors.roles }"
           class="custom-input"
         />
         <small v-if="errors.roles" class="p-error">{{ errors.roles }}</small>
       </div>
+    </div>
+    <div class="flex flex-col gap-4 w-full" v-else>
+      <label class="font-semibold">Nueva Contraseña</label>
+      <Password
+        v-model="localUsuario.password"
+        placeholder="Ingrese la nueva contraseña"
+        toggleMask
+        :class="{ 'p-invalid': errors.password }"
+        class="custom-input"
+      />
+      <small v-if="errors.password" class="p-error">{{ errors.password }}</small>
+      <label class="font-semibold">Confirmar Contraseña</label>
+      <Password
+        v-model="localUsuario.confirmPassword"
+        placeholder="Confirme la nueva contraseña"
+        toggleMask
+        :class="{ 'p-invalid': errors.confirmPassword }"
+        class="custom-input"
+      />
+      <small v-if="errors.confirmPassword" class="p-error">{{ errors.confirmPassword }}</small>
     </div>
   </template>
   
@@ -80,10 +100,11 @@
   import type { UsuarioUpdateDto } from "@/interfaces/UsuarioDto";
   
   interface UsuarioForm {
+    id: number;
     nombre: string;
     apellido: string;
     email: string;
-    password?: string;
+    password: string;
     confirmPassword?: string;
     roles: string[];
     consultasIds: number[];
@@ -91,11 +112,13 @@
   
   const props = defineProps<{
     usuario?: Partial<UsuarioUpdateDto>;
-    rolesDisponibles: string[];
+    rolesDisponibles: any;
     consultas: { id: number; nombre: string }[];
+    changePassword: boolean;
   }>();
   
   const localUsuario = ref<UsuarioForm>({
+    id: 0,
     nombre: "",
     apellido: "",
     email: "",
@@ -125,6 +148,11 @@
       }),
     roles: Yup.array().min(1, "Debe seleccionar al menos un rol"),
     } );
+
+    const passwordSchema = Yup.object().shape({
+    password: Yup.string().required("La contraseña es obligatoria").min(6, "Debe tener al menos 6 caracteres"),
+    confirmPassword: Yup.string().required("Debe confirmar la contraseña").oneOf([Yup.ref("password")], "Las contraseñas no coinciden"),
+  });
   
   const validateForm = async (): Promise<boolean> => {
     try {
@@ -144,12 +172,32 @@
       return false;
     }
   };
+
+  const validateFormPassword = async (): Promise<boolean> => {
+    try {
+      await passwordSchema.validate(localUsuario.value, { abortEarly: false });
+      errors.value = {};
+      return true;
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        const newErrors: Partial<Record<keyof UsuarioForm, string>> = {};
+        err.inner.forEach((error) => {
+          if (error.path) {
+            newErrors[error.path as keyof UsuarioForm] = error.message;
+          }
+        });
+        errors.value = newErrors;
+      }
+      return false;
+    }
+  };  
   
   watch(
     () => props.usuario,
     (newUsuario) => {
       if (newUsuario) {
         localUsuario.value = {
+          id: newUsuario.id || 0,
           nombre: newUsuario.nombre || "",
           apellido: newUsuario.apellido || "",
           email: newUsuario.email || "",
@@ -160,6 +208,7 @@
         };
       } else {
         localUsuario.value = {
+          id: 0,
           nombre: "",
           apellido: "",
           email: "",
@@ -176,6 +225,7 @@
   defineExpose({
     localUsuario,
     validateForm,
+    validateFormPassword
   });
   </script>
   

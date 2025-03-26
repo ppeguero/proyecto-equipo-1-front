@@ -17,15 +17,11 @@
       :width="modalWidth"
     >
       <UsuarioForm
-        v-if="modalMode === 'add' || modalMode === 'edit'"
+        v-if="modalMode === 'add' || modalMode === 'edit' || modalMode === 'changePassword'"
         :usuario="selectedUsuario"
         :rolesDisponibles="roles"
+        :changePassword="modalMode === 'changePassword'"
         ref="usuarioForm"
-      />
-      <UsuarioDetail
-        v-else-if="modalMode === 'detail'"
-        :usuario="selectedUsuario"
-        @close="closeModal"
       />
       <div v-else-if="modalMode === 'delete'" class="text-center">
         <p>¿Estás seguro de que deseas eliminar este usuario?</p>
@@ -52,6 +48,12 @@
             @click="deleteUsuario"
             class="custom-danger-button"
           />
+          <Button 
+            v-else-if="modalMode === 'changePassword'"
+            label="Cambiar Contraseña"
+            @click="changePassword"
+            class="custom-primary-button"
+          />
         </div>
       </template>
     </ModalBase>
@@ -60,6 +62,10 @@
   <UsuarioTable
     :usuarios="usuarios"
     :roles="roles"
+    @edit="openModal('edit', $event)"
+    @delete="openModal('delete', $event)"
+    @detail="openModal('detail', $event)"
+    @changePassword="openModal('changePassword', $event)"
   />
   <Toast />
 </template>
@@ -90,11 +96,11 @@ const { roles } = storeToRefs(rolesStore);
 const toast = useToast();
 
 const modalVisible = ref(false);
-const modalMode = ref<'add' | 'edit' | 'delete' | 'detail'>('add');
+const modalMode = ref<'add' | 'edit' | 'delete' | 'detail' | 'changePassword'>('add');
 const selectedUsuario = ref<UsuarioDto | null>(null);
 const modalHeader = ref('');
 const isMobile = ref(false);
-const usuarioForm = ref<InstanceType<typeof UsuarioForm> | null>(null);
+const usuarioForm = ref<InstanceType<typeof UsuarioForm>>();
 
 const modalWidth = computed(() => {
   return isMobile.value ? '90vw' : '45rem';
@@ -115,7 +121,7 @@ onUnmounted(() => {
   window.removeEventListener('resize', checkMobile);
 });
 
-const openModal = (mode: 'add' | 'edit' | 'delete' | 'detail', usuario?: UsuarioDto) => {
+const openModal = (mode: 'add' | 'edit' | 'delete' | 'detail' | 'changePassword', usuario?: UsuarioDto) => {
   modalMode.value = mode;
   selectedUsuario.value = usuario ? { ...usuario } : null;
 
@@ -123,6 +129,7 @@ const openModal = (mode: 'add' | 'edit' | 'delete' | 'detail', usuario?: Usuario
   else if (mode === 'edit') modalHeader.value = 'Editar Usuario';
   else if (mode === 'delete') modalHeader.value = 'Eliminar Usuario';
   else if (mode === 'detail') modalHeader.value = 'Detalle del Usuario';
+  else if (mode === 'changePassword') modalHeader.value = 'Cambiar Contraseña';
 
   modalVisible.value = true;
 };
@@ -158,7 +165,19 @@ const deleteUsuario = async () => {
   if (selectedUsuario.value) {
     await usuarioStore.deleteUsuario(selectedUsuario.value.id);
     closeModal();
+    await getAllUsuarios();
     toast.add({ severity: 'success', summary: 'Éxito', detail: 'Usuario eliminado correctamente' });
+  }
+};
+
+const changePassword = async () => {
+  if (selectedUsuario.value) {
+    const isValid = await usuarioForm.value?.validateFormPassword();
+    if (isValid) {
+      await usuarioStore.updatePassword(selectedUsuario.value.id, usuarioForm.value.localUsuario.password);
+      closeModal();
+      toast.add({ severity: 'success', summary: 'Éxito', detail: 'Contraseña cambiada correctamente' });
+    }
   }
 };
 </script>

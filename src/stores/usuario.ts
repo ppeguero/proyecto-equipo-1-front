@@ -64,6 +64,16 @@ export const useUsuarioStore = defineStore("usuario", {
         throw error;
       }
     },
+
+    async deleteUsuario(id: number) {
+      try {
+        await usuarioService.delete(id);
+        this.usuario = null;
+      } catch (error) {
+        console.error("Error deleting user:", error);
+        throw error;
+      }
+    },
   },
 
   

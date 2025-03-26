@@ -38,4 +38,12 @@ export const usuarioService = {
       config: { addToken: true },
     });
   },
+
+  delete: async (id: number): Promise<void> => {
+    await apiRequest<null, AxiosResponse<void>>({
+      method: 'delete',
+      url: `/Usuarios/${id}`,
+      config: { addToken: true },
+    });
+  },
 };
