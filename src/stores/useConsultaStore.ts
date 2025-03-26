@@ -14,9 +14,7 @@ export const useConsultaStore = defineStore('consulta', () => {
         error.value = null;
         try {
             const response = await consultaService.getAll();
-            console.log(response);
             consultas.value = response.data;
-            console.log(consultas.value);
         } catch (err) {
             error.value = 'Error al obtener las consultas';
         } finally {
@@ -43,6 +41,7 @@ export const useConsultaStore = defineStore('consulta', () => {
         try {
             const response = await consultaService.create(consultaDto);
             consultas.value.push(response.data);
+            fetchAllConsultas();
         } catch (err) {
             error.value = 'Error al crear la consulta';
         } finally {
@@ -54,7 +53,7 @@ export const useConsultaStore = defineStore('consulta', () => {
         loading.value = true;
         error.value = null;
         try {
-            await consultaService.update(id, consultaDto);
+           const response = await consultaService.update(id, consultaDto);
             await fetchAllConsultas();
         } catch (err) {
             error.value = 'Error al actualizar la consulta';
@@ -76,6 +75,19 @@ export const useConsultaStore = defineStore('consulta', () => {
         }
     };
 
+    const assignMedicamento = async (consultaId: number, medicamentoId: number) => {
+        loading.value = true;
+        error.value = null;
+        try {
+            await consultaService.assignMedicamento(consultaId, medicamentoId);
+            await fetchConsultaById(consultaId);
+        } catch (err) {
+            error.value = 'Error al asignar el medicamento';
+        } finally {
+            loading.value = false;
+        }
+    };
+
     return {
         consultas,
         consulta,
@@ -86,5 +98,6 @@ export const useConsultaStore = defineStore('consulta', () => {
         createConsulta,
         updateConsulta,
         deleteConsulta,
+        assignMedicamento,
     };
 });

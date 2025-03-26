@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
     <div
-      v-for="(item, key) in cards"
+      v-for="(item, key) in filteredCards"
       :key="key"
       class="card bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow text-center cursor-pointer"
       @click="navigateTo(item.route)"
@@ -52,6 +52,8 @@ const cards = computed(() => [
     route: 'dashboard/medicamentos',
   },
 ]);
+
+const filteredCards = computed(() => cards.value.filter((card) => card.value > 0));
 
 const navigateTo = (route: string) => {
   router.push(route);

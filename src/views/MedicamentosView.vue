@@ -1,14 +1,20 @@
 <template>
   <div class="mx-4">
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold py-2 pl-2 text-gray-800">Medicamentos</h1>
-      <Button label="Agregar Medicamento" @click="openModal('add')" class="custom-primary-button" />
+      <h1 class="text-2xl font-bold py-2 pl-2 text-gray-800">Medicamentos</h1>
+      <Button
+        :label="isMobile ? '' : 'Agregar Medicamento'"
+        :icon="isMobile ? 'pi pi-plus' : ''"
+        @click="openModal('add')"
+        class="custom-primary-button"
+      />
     </div>
 
     <ModalBase
       :visible="modalVisible"
       :header="modalHeader"
       @update:visible="modalVisible = $event"
+      :width="modalWidth"
     >
       <MedicamentosForm
         v-if="modalMode === 'add' || modalMode === 'edit'"
@@ -54,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useMedicamentoStore } from '@/stores/medicamentoStore';
 import { useToast } from 'primevue/usetoast';
 import Button from 'primevue/button';
@@ -76,9 +82,24 @@ const modalMode = ref<'add' | 'edit' | 'delete'>('add');
 const selectedMedicamento = ref<Medicamento | null>(null);
 const modalHeader = ref('');
 const medicamentoForm = ref<InstanceType<typeof MedicamentosForm> | null>(null);
+const isMobile = ref(false);
 
-onMounted(async () => {
-  await fetchMedicamentos();
+const modalWidth = computed(() => {
+  return isMobile.value ? '90vw' : '35rem';
+});
+
+const checkMobile = () => {
+  isMobile.value = window.matchMedia("(max-width: 768px)").matches;
+};
+
+onMounted(() => {
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+  fetchMedicamentos();
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile);
 });
 
 const openModal = (mode: 'add' | 'edit' | 'delete', medicamento?: Medicamento) => {
@@ -104,7 +125,7 @@ const addMed = async () => {
         nombre: newMedicamento.nombre,
         descripcion: newMedicamento.descripcion,
         dosis: newMedicamento.dosis,
-        fechaVencimiento: new Date(newMedicamento.fechaVencimiento).toISOString().split('T')[0], // Formato "yyyy-MM-dd"
+        fechaVencimiento: new Date(newMedicamento.fechaVencimiento).toISOString().split('T')[0],
         stock: Number(newMedicamento.stock),
       };
       await addMedicamento(medicamentoDto);
