@@ -122,6 +122,7 @@ const fetchHistorialCitas = async () => {
     const response = await mascotaService.getHistorialCitas(props.pet.id);
     historialCitas.value = response;
   } catch (error) {
+    throw (error);
     // console.error('Error al obtener historial de citas:', error);
   }
 };
@@ -155,7 +156,7 @@ onMounted(() => {
 .pet-detail {
   padding: 1rem;
 }
-::v-deep .p-datatable-tbody > tr > td {
+::deep .p-datatable-tbody > tr > td {
   text-align: center;
   border-color: var(--p-datatable-body-cell-border-color);
   border-style: solid;

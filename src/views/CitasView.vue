@@ -74,6 +74,7 @@ const guardarCita = async (cita) => {
     showModal.value = false
   } catch (error) {
     // console.error('Error al guardar la cita:', error)
+    throw (error);
     toast.add({ severity: 'error', summary: 'Error', detail: 'Hubo un problema al guardar la cita', life: 3000 })
   }
 }
@@ -106,6 +107,7 @@ const eliminarCita = async () => {
     showConfirmDeleteModal.value = false
   } catch (error) {
     // console.error('Error al eliminar la cita:', error)
+    throw (error);
     toast.add({ severity: 'error', summary: 'Error', detail: 'Hubo un problema al eliminar la cita', life: 3000 })
   }
 }

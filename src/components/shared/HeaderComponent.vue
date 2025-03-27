@@ -81,6 +81,7 @@ const decodeToken = () => {
         // console.warn('El token no contiene los campos "email" o "role". Verifica el payload del token.');
       }
     } catch (error) {
+      throw (error);
       // console.error('Error decodificando el token:', error);
       userEmail.value = null;
       userRole.value = null;

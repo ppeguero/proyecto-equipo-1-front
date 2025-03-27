@@ -106,7 +106,8 @@ const handleLoginSubmit = async () => {
             router.push('/dashboard');
         } catch (error) {
             isLoading.value = false;
-            errorMessage.value = 'Credenciales incorrectas.';
+          errorMessage.value = 'Credenciales incorrectas.';
+          throw (error);
             // console.error('Error en el login:', error);
         }
     }

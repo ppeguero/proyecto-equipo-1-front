@@ -25,6 +25,7 @@ const getUserRole = (): string | null => {
       return decoded.role;
     } catch (error) {
       // console.error('Error decodificando el token:', error);
+      throw (error);
       return null;
     }
   }

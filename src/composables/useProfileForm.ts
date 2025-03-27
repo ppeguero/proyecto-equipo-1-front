@@ -64,6 +64,7 @@ export function useProfileForm() {
       router.push('/dashboard');
     } catch (error) {
       toast.add({ severity: 'error', summary: 'Error', detail: 'Hubo un error al actualizar el perfil.', life: 3000 });
+      throw (error);
     }
   };
 
@@ -94,6 +95,7 @@ export function useProfileForm() {
       }
     } catch (error) {
       // console.error('Error en onMounted:', error);
+      throw (error);
       toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar el perfil.', life: 3000 });
       router.push('/login');
     }

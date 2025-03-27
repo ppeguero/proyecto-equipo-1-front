@@ -32,6 +32,7 @@ const decodeToken = () => {
       userRole.value = decoded.role || null;
     } catch (error) {
       // console.error('Error decodificando el token:', error);
+      throw (error);
       userEmail.value = null;
       userRole.value = null;
     }

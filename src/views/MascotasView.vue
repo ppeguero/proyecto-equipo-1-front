@@ -151,6 +151,7 @@ const addPet = async () => {
       closeModal();
     } catch (error) {
       toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo agregar la mascota', life: 3000 });
+      throw (error);
       // console.error('Error al agregar mascota:', error);
     }
   }
@@ -176,6 +177,7 @@ const editPet = async () => {
       closeModal();
     } catch (error) {
       toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar la mascota', life: 3000 });
+      throw (error);
       // console.error('Error al actualizar mascota:', error);
     }
   }

@@ -10,6 +10,7 @@ export const useMascotaStore = defineStore("mascota", () => {
     try {
       mascotas.value = await mascotaService.getAll();
     } catch (error) {
+      throw (error);
       // console.error("Error al obtener mascotas:", error);
     }
   }

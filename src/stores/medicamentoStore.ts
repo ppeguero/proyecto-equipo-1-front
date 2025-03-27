@@ -10,6 +10,7 @@ export const useMedicamentoStore = defineStore("medicamento", () => {
     try {
       medicamentos.value = await medicamentoService.getAll();
     } catch (error) {
+      throw (error);
       // console.error("Error al obtener medicamentos:", error);
     }
   }

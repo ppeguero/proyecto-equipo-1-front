@@ -20,6 +20,7 @@ export const useUsuarioStore = defineStore("usuario", () => {
     try {
       return jwtDecode<JwtPayload>(token.value);
     } catch (error) {
+      throw (error);
       // console.error("Error decoding token:", error);
       return null;
     }
