@@ -10,7 +10,8 @@ export const useMascotaStore = defineStore("mascota", () => {
     try {
       mascotas.value = await mascotaService.getAll();
     } catch (error) {
-      console.error("Error al obtener mascotas:", error);
+      throw (error);
+      // console.error("Error al obtener mascotas:", error);
     }
   }
 
@@ -20,7 +21,7 @@ export const useMascotaStore = defineStore("mascota", () => {
       const nuevaMascota = await mascotaService.create(mascota);
       mascotas.value.push(nuevaMascota);
     } catch (error) {
-      console.error("Error al agregar mascota:", error);
+      // console.error("Error al agregar mascota:", error);
       throw error;
     }
   }
@@ -34,7 +35,7 @@ export const useMascotaStore = defineStore("mascota", () => {
         mascotas.value[index] = updatedMascota;
       }
     } catch (error) {
-      console.error("Error al actualizar mascota:", error);
+      // console.error("Error al actualizar mascota:", error);
       throw error;
     }
   }
@@ -44,7 +45,7 @@ export const useMascotaStore = defineStore("mascota", () => {
       await mascotaService.delete(id);
       mascotas.value = mascotas.value.filter((m) => m.id !== id);
     } catch (error) {
-      console.error("Error al eliminar mascota:", error);
+      // console.error("Error al eliminar mascota:", error);
       throw error;
     }
   }

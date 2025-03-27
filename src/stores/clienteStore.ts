@@ -10,7 +10,7 @@ export const useClienteStore = defineStore('cliente', () => {
     try {
       clientes.value = await clienteService.getAll();
     } catch (error) {
-      console.error('Error al obtener clientes:', error);
+      // console.error('Error al obtener clientes:', error);
       throw error;
     }
   };
@@ -19,7 +19,7 @@ export const useClienteStore = defineStore('cliente', () => {
     try {
       await clienteService.create(cliente);
     } catch (error) {
-      console.error('Error al agregar cliente:', error);
+      // console.error('Error al agregar cliente:', error);
       throw error;
     }
   };
@@ -33,7 +33,7 @@ export const useClienteStore = defineStore('cliente', () => {
         clientes.value[index] = updatedCliente;
       }
     } catch (error) {
-      console.error('Error al actualizar cliente:', error);
+      // console.error('Error al actualizar cliente:', error);
       throw error;
     }
   };
@@ -43,7 +43,7 @@ export const useClienteStore = defineStore('cliente', () => {
       await clienteService.delete(id);
       clientes.value = clientes.value.filter((c) => c.id !== id);
     } catch (error) {
-      console.error('Error al eliminar cliente:', error);
+      // console.error('Error al eliminar cliente:', error);
       throw error;
     }
   };

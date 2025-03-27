@@ -134,7 +134,8 @@ const addMed = async () => {
       closeModal();
     } catch (error) {
       toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo agregar el medicamento', life: 3000 });
-      console.error('Error al agregar medicamento:', error);
+      throw (error);
+      // console.error('Error al agregar medicamento:', error);
     }
   }
 };
@@ -157,7 +158,8 @@ const editMed = async () => {
       closeModal();
     } catch (error) {
       toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar el medicamento', life: 3000 });
-      console.error('Error al actualizar medicamento:', error);
+      throw (error);
+      // console.error('Error al actualizar medicamento:', error);
     }
   }
 };
@@ -171,7 +173,8 @@ const deleteMed = async () => {
       closeModal();
     } catch (error) {
       toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el medicamento', life: 3000 });
-      console.error('Error al eliminar medicamento:', error);
+      throw (error);
+      // console.error('Error al eliminar medicamento:', error);
     }
   }
 };

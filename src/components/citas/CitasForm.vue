@@ -17,6 +17,7 @@ import { useStorage } from "@vueuse/core";
 const token = useStorage("token", "");
 const userEmail = ref<string | null>(null);
 const userRole = ref<string | null>(null);
+const errors = ref<Partial<Record<keyof Consulta, string>>>({});
 
 interface JwtPayload {
   nameid: string;
@@ -31,7 +32,8 @@ const decodeToken = () => {
       userEmail.value = decoded.email || null;
       userRole.value = decoded.role || null;
     } catch (error) {
-      console.error('Error decodificando el token:', error);
+      // console.error('Error decodificando el token:', error);
+      throw (error);
       userEmail.value = null;
       userRole.value = null;
     }
@@ -134,7 +136,8 @@ const validateForm = async () => {
           newErrors[error.path as keyof Consulta] = error.message;
         }
       });
-      return newErrors;
+      errors.value = newErrors;
+      return false;
     }
     return {};
   }
@@ -159,10 +162,10 @@ watch(
 );
 
 const handleSubmit = async () => {
-  cita.value.motivo = removeHTMLTags(cita.value.motivo);
-
   const valid = await validateForm();
   if (valid) {
+    cita.value.motivo = removeHTMLTags(cita.value.motivo);
+
     const citaFormateada = {
       id: cita.value.id || 0,
       fecha: cita.value.fecha.toISOString(),
@@ -199,23 +202,28 @@ onMounted(() => {
     <form @submit.prevent="handleSubmit">
       <div class="mb-4">
         <label class="block text-gray-700">Motivo</label>
-        <InputText v-model="cita.motivo" class="w-full" required />
+        <InputText v-model="cita.motivo" class="w-full" />
+        <small v-if="errors.motivo" class="text-red-500">{{ errors.motivo }}</small>
       </div>
       <div class="mb-4">
         <label class="block text-gray-700">Fecha</label>
-        <Calendar v-model="cita.fecha" dateFormat="yy-mm-dd" class="w-full" required />
+        <Calendar v-model="cita.fecha" dateFormat="yy-mm-dd" class="w-full" />
+        <small v-if="errors.fecha" class="text-red-500">{{ errors.fecha }}</small>
       </div>
       <div class="mb-4">
         <label class="block text-gray-700">Hora</label>
-        <Dropdown v-model="cita.hora" :options="horariosDisponibles" class="w-full" required placeholder="Selecciona una hora" />
+        <Dropdown v-model="cita.hora" :options="horariosDisponibles" class="w-full" placeholder="Selecciona una hora" />
+        <small v-if="errors.hora" class="text-red-500">{{ errors.hora }}</small>
       </div>
       <div class="mb-4">
         <label class="block text-gray-700">Mascota</label>
-        <Dropdown v-model="cita.mascotaId" :options="mascotas" optionLabel="nombre" optionValue="id" class="w-full" required />
+        <Dropdown v-model="cita.mascotaId" :options="mascotas" optionLabel="nombre" optionValue="id" class="w-full" />
+        <small v-if="errors.mascotaId" class="text-red-500">{{ errors.mascotaId }}</small>
       </div>
       <div class="mb-4">
         <label class="block text-gray-700">Estatus</label>
-        <Dropdown v-model="cita.estatus" :options="estatusOpciones" optionLabel="label" optionValue="value" class="w-full" required />
+        <Dropdown v-model="cita.estatus" :options="estatusOpciones" optionLabel="label" optionValue="value" class="w-full" />
+        <small v-if="errors.estatus" class="text-red-500">{{ errors.estatus }}</small>
       </div>
 
       <div class="mb-4" v-if="(mostrarMedicamentos &&  !isRecepcionista)">
@@ -228,6 +236,7 @@ onMounted(() => {
           class="w-full"
           placeholder="Selecciona los medicamentos"
         />
+        <small v-if="errors.medicamentosIds" class="text-red-500">{{ errors.medicamentosIds }}</small>
       </div>
 
       <div v-if="isLoading" class="absolute inset-0 flex justify-center items-center bg-[#fff] bg-opacity-50 z-50">

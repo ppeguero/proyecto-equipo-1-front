@@ -104,7 +104,8 @@ const fetchCita = async () => {
     const response = await mascotaService.getById(props.pet.mascotaId);
     mascota.value = response;
   } catch (error) {
-    console.error('Error al obtener la última cita:', error);
+    throw (error);
+    // console.error('Error al obtener la última cita:', error);
   }
 };
 
