@@ -24,7 +24,7 @@ const getUserRole = (): string | null => {
       const decoded = jwtDecode<JwtPayload>(token.value);
       return decoded.role;
     } catch (error) {
-      console.error('Error decodificando el token:', error);
+      // console.error('Error decodificando el token:', error);
       return null;
     }
   }

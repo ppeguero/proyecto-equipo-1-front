@@ -102,7 +102,7 @@ const fetchMascotas = async () => {
         mascotasNombres.value[id] = mascota.nombre;
         mascotasImagenes.value[id] = mascota.urlImagen || "/img/default-pet.png";
       } catch (error) {
-        console.error("Error obteniendo la mascota:", error);
+        // console.error("Error obteniendo la mascota:", error);
         mascotasNombres.value[id] = "Desconocido";
         mascotasImagenes.value[id] = "/img/default-pet.png";
       }

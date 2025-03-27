@@ -122,7 +122,7 @@ const fetchHistorialCitas = async () => {
     const response = await mascotaService.getHistorialCitas(props.pet.id);
     historialCitas.value = response;
   } catch (error) {
-    console.error('Error al obtener historial de citas:', error);
+    // console.error('Error al obtener historial de citas:', error);
   }
 };
 

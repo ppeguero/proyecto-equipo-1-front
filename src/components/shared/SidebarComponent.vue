@@ -79,7 +79,7 @@ const logout = async () => {
   try {
     await authService.logout(refreshToken.value);
   } catch (error) {
-    console.error('Error al cerrar sesión:', error);
+    // console.error('Error al cerrar sesión:', error);
   } finally {
         token.value = '';
     refreshToken.value = '';
@@ -94,7 +94,7 @@ const verifyRole = (role: string[]) => {
       const decoded = jwtDecode<JwtPayload>(token.value);
       return role.includes(decoded.role);
     } catch (error) {
-      console.error('Error decodificando el token:', error);
+      // console.error('Error decodificando el token:', error);
       return false;
     }
   }

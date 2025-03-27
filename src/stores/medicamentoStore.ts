@@ -10,7 +10,7 @@ export const useMedicamentoStore = defineStore("medicamento", () => {
     try {
       medicamentos.value = await medicamentoService.getAll();
     } catch (error) {
-      console.error("Error al obtener medicamentos:", error);
+      // console.error("Error al obtener medicamentos:", error);
     }
   }
 
@@ -19,7 +19,7 @@ export const useMedicamentoStore = defineStore("medicamento", () => {
       const nuevoMedicamento = await medicamentoService.create(medicamento);
       medicamentos.value.push(nuevoMedicamento);
     } catch (error) {
-      console.error("Error al agregar medicamento:", error);
+      // console.error("Error al agregar medicamento:", error);
       throw error;
     }
   }
@@ -33,7 +33,7 @@ export const useMedicamentoStore = defineStore("medicamento", () => {
         medicamentos.value[index] = updatedMedicamento;
       }
     } catch (error) {
-      console.error("Error al actualizar medicamento:", error);
+      // console.error("Error al actualizar medicamento:", error);
       throw error;
     }
   }
@@ -43,7 +43,7 @@ export const useMedicamentoStore = defineStore("medicamento", () => {
       await medicamentoService.delete(id);
       medicamentos.value = medicamentos.value.filter((m) => m.id !== id);
     } catch (error) {
-      console.error("Error al eliminar medicamento:", error);
+      // console.error("Error al eliminar medicamento:", error);
       throw error;
     }
   }

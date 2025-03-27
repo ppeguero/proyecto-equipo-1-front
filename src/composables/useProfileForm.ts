@@ -93,7 +93,7 @@ export function useProfileForm() {
         throw new Error('Datos del usuario no válidos');
       }
     } catch (error) {
-      console.error('Error en onMounted:', error);
+      // console.error('Error en onMounted:', error);
       toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar el perfil.', life: 3000 });
       router.push('/login');
     }
