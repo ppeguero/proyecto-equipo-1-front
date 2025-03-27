@@ -111,6 +111,8 @@ export function useDashboardData() {
 
   onMounted(() => loadData());
 
+  console.log('summary', summary);
+
   return {
     summary,
     appointmentChartData,
