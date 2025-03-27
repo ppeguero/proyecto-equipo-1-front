@@ -87,7 +87,6 @@ const isVeterinario = computed(() => userRole.value === 'Veterinario');
 const isAdmin = computed(() => userRole.value === 'Administrador');
 
 const filteredSummary = computed(() => {
-  console.log("Recalculando filteredSummary", summary.value);
   if (!summary.value) return {};
 
   return {
@@ -97,8 +96,6 @@ const filteredSummary = computed(() => {
     totalMedicines: isAdmin.value || isVeterinario.value ? summary.value.totalMedicines || 0 : undefined,
   };
 });
-
-console.log(filteredSummary)
 
 onMounted(() => {
   decodeToken();

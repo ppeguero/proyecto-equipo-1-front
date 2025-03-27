@@ -22,12 +22,14 @@ export function useDashboardData() {
   const petSpeciesChartData = ref<ChartData | null>(null);
 
   const loadData = async () => {
-    await Promise.all([
+    await Promise.allSettled([
       consultaStore.fetchAllConsultas(),
       mascotaStore.fetchMascotas(),
       medicamentoStore.fetchMedicamentos(),
-      clienteStore.fetchClientes(),
+      clienteStore.fetchClientes()
     ]);
+
+
 
     summary.value = {
       totalAppointments: consultaStore.consultas.length,
@@ -110,8 +112,6 @@ export function useDashboardData() {
   });
 
   onMounted(() => loadData());
-
-  console.log('summary', summary);
 
   return {
     summary,
