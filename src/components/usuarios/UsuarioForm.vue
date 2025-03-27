@@ -129,10 +129,13 @@
     nombre: Yup.string().required("El nombre es obligatorio"),
     apellido: Yup.string().required("El apellido es obligatorio"),
     email: Yup.string().email("Correo inválido").required("El correo es obligatorio"),
-    password: Yup.string().required("La contraseña es obligatoria").min(6, "Debe tener al menos 6 caracteres").matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/,
-      "La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número"
-    ),
+    password: Yup.string()
+      .required("La contraseña es obligatoria")
+      .min(6, "Debe tener al menos 6 caracteres")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_.])[A-Za-z\d@$!%*?&_.]{6,}$/,
+        "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial"
+      ),
     confirmPassword: Yup.string().required("Debe confirmar la contraseña").oneOf([Yup.ref("password")], "Las contraseñas no coinciden"),
     rolId: Yup.string().required("Debe seleccionar al menos un rol"),
     } );
