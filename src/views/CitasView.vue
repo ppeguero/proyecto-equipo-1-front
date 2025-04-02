@@ -73,7 +73,8 @@ const guardarCita = async (cita) => {
     }
     showModal.value = false
   } catch (error) {
-    console.error('Error al guardar la cita:', error)
+    // console.error('Error al guardar la cita:', error)
+    throw (error);
     toast.add({ severity: 'error', summary: 'Error', detail: 'Hubo un problema al guardar la cita', life: 3000 })
   }
 }
@@ -89,7 +90,7 @@ const mostrarModalConfirmacionEliminacion = (cita) => {
     citaAEliminar.value = cita
     showConfirmDeleteModal.value = true
   } else {
-    console.error('Cita no válida para eliminar:', cita)
+    // console.error('Cita no válida para eliminar:', cita)
     toast.add({ severity: 'error', summary: 'Error', detail: 'La cita no es válida para eliminar', life: 3000 })
   }
 }
@@ -100,12 +101,13 @@ const eliminarCita = async () => {
       await consultaStore.deleteConsulta(citaAEliminar.value)
       toast.add({ severity: 'success', summary: 'Éxito', detail: 'Cita eliminada correctamente', life: 3000 })
     } else {
-      console.error('Error: No se encontró el id de la cita para eliminar')
+      // console.error('Error: No se encontró el id de la cita para eliminar')
       toast.add({ severity: 'error', summary: 'Error', detail: 'Hubo un problema al eliminar la cita', life: 3000 })
     }
     showConfirmDeleteModal.value = false
   } catch (error) {
-    console.error('Error al eliminar la cita:', error)
+    // console.error('Error al eliminar la cita:', error)
+    throw (error);
     toast.add({ severity: 'error', summary: 'Error', detail: 'Hubo un problema al eliminar la cita', life: 3000 })
   }
 }

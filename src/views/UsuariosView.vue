@@ -167,7 +167,7 @@ const deleteUsuario = async () => {
     await usuarioStore.deleteUsuario(selectedUsuario.value.id);
     closeModal();
     await getAllUsuarios();
-    toast.add({ severity: 'success', summary: 'Éxito', detail: 'Usuario eliminado correctamente' });
+    toast.add({ severity: 'success', summary: 'Éxito', detail: 'Usuario eliminado correctamente', life: 3000 });
   }
 };
 

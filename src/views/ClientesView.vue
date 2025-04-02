@@ -138,7 +138,8 @@ const handleAddCliente = async () => {
       closeModal();
     } catch (error) {
       toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo agregar el cliente', life: 3000 });
-      console.error('Error al agregar cliente:', error);
+      throw (error);
+      // console.error('Error al agregar cliente:', error);
     }
   }
 };
@@ -161,7 +162,8 @@ const handleEditCliente = async () => {
       closeModal();
     } catch (error) {
       toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar el cliente', life: 3000 });
-      console.error('Error al actualizar cliente:', error);
+      throw (error);
+      // console.error('Error al actualizar cliente:', error);
     }
   }
 };
@@ -175,7 +177,8 @@ const handleDeleteCliente = async () => {
       closeModal();
     } catch (error) {
       toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el cliente', life: 3000 });
-      console.error('Error al eliminar cliente:', error);
+      throw (error);
+      // console.error('Error al eliminar cliente:', error);
     }
   }
 };

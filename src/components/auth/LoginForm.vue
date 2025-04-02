@@ -7,10 +7,10 @@
         <div class="flex flex-col justify-center gap-4">
             <div class="flex flex-col gap-1">
                 <label class="text-white uppercase font-semibold" for="email">E-Mail</label>
-                <InputText 
-                    type="email" 
-                    name="email" 
-                    class="custom-input" 
+                <InputText
+                    type="email"
+                    name="email"
+                    class="custom-input"
                     v-model="email"
                 />
                 <span v-if="errors.email" class="text-red-500 text-sm">{{ errors.email }}</span>
@@ -18,14 +18,14 @@
             <div class="flex flex-col gap-1 relative">
                 <label class="text-white uppercase font-semibold" for="password">Contraseña</label>
                 <div class="relative">
-                    <InputText 
-                        :type="passwordVisible ? 'text' : 'password'" 
+                    <InputText
+                        :type="passwordVisible ? 'text' : 'password'"
                         name="password"
                         class="custom-input w-full pr-10"
                         v-model="password"
                     />
-                    <i 
-                        :class="passwordVisible ? 'pi pi-eye-slash' : 'pi pi-eye'" 
+                    <i
+                        :class="passwordVisible ? 'pi pi-eye-slash' : 'pi pi-eye'"
                         class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
                         @click="togglePasswordVisibility"
                     ></i>
@@ -71,7 +71,7 @@ const loginSchema = Yup.object().shape({
 });
 
 const validateForm = async (): Promise<boolean> => {
-    errors.value = {}; 
+    errors.value = {};
     try {
         await loginSchema.validate(
             { email: email.value, password: password.value },
@@ -99,15 +99,16 @@ const handleLoginSubmit = async () => {
                 email: email.value,
                 password: password.value,
             });
-            
+
             token.value = response.data.token;
             refreshToken.value = response.data.refreshToken;
             errorMessage.value = '';
             router.push('/dashboard');
         } catch (error) {
             isLoading.value = false;
-            errorMessage.value = 'Credenciales incorrectas.';
-            console.error('Error en el login:', error);
+          errorMessage.value = 'Credenciales incorrectas.';
+          throw (error);
+            // console.error('Error en el login:', error);
         }
     }
 };

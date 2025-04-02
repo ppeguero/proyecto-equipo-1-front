@@ -11,7 +11,7 @@ export const useRolStore = defineStore("rol", () => {
       roles.value = await rolService.getAll();
       return roles.value;
     } catch (error) {
-      console.error("Error al obtener roles:", error);
+      // console.error("Error al obtener roles:", error);
       throw error;
     }
   };

@@ -57,7 +57,7 @@ export class MascotaService {
       });
       return response.data;
     } catch (error) {
-      console.error("Error details en create:", error.response?.data || error.message);
+      // console.error("Error details en create:", error.response?.data || error.message);
       throw error;
     }
   }
@@ -84,7 +84,7 @@ export class MascotaService {
         config: { headers: { "Content-Type": "multipart/form-data" } },
       });
     } catch (error) {
-      console.error("Error details:", error.response?.data);
+      // console.error("Error details:", error.response?.data);
       throw error;
     }
   }

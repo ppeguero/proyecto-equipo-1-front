@@ -130,22 +130,21 @@
     apellido: Yup.string().required("El apellido es obligatorio"),
     email: Yup.string().email("Correo inválido").required("El correo es obligatorio"),
     password: Yup.string()
-      .when("$isNew", {
-        is: (isNew: boolean) => isNew,
-        then: (schema) => schema.required("La contraseña es obligatoria").min(6, "Debe tener al menos 6 caracteres"),
-        otherwise: (schema) => schema
-      }),
-    confirmPassword: Yup.string()
-      .when("$isNew", {
-        is: (isNew: boolean) => isNew,
-        then: (schema) => schema.required("Debe confirmar la contraseña").oneOf([Yup.ref("password")], "Las contraseñas no coinciden"),
-        otherwise: (schema) => schema
-      }),
+      .required("La contraseña es obligatoria")
+      .min(6, "Debe tener al menos 6 caracteres")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_.])[A-Za-z\d@$!%*?&_.]{6,}$/,
+        "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial"
+      ),
+    confirmPassword: Yup.string().required("Debe confirmar la contraseña").oneOf([Yup.ref("password")], "Las contraseñas no coinciden"),
     rolId: Yup.string().required("Debe seleccionar al menos un rol"),
     } );
 
     const passwordSchema = Yup.object().shape({
-    password: Yup.string().required("La contraseña es obligatoria").min(6, "Debe tener al menos 6 caracteres"),
+    password: Yup.string().required("La contraseña es obligatoria").min(6, "Debe tener al menos 6 caracteres").matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/,
+      "La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número"
+    ),
     confirmPassword: Yup.string().required("Debe confirmar la contraseña").oneOf([Yup.ref("password")], "Las contraseñas no coinciden"),
   });
   

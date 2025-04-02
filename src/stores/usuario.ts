@@ -20,7 +20,8 @@ export const useUsuarioStore = defineStore("usuario", () => {
     try {
       return jwtDecode<JwtPayload>(token.value);
     } catch (error) {
-      console.error("Error decoding token:", error);
+      throw (error);
+      // console.error("Error decoding token:", error);
       return null;
     }
   }
@@ -30,7 +31,7 @@ export const useUsuarioStore = defineStore("usuario", () => {
       usuarios.value = await usuarioService.getAll();
       return usuarios.value;
     } catch (error) {
-      console.error("Error fetching users:", error);
+      // console.error("Error fetching users:", error);
       throw error;
     }
   }
@@ -40,7 +41,7 @@ export const useUsuarioStore = defineStore("usuario", () => {
       usuario.value = await usuarioService.getById(id);
       return usuario.value;
     } catch (error) {
-      console.error("Error fetching user:", error);
+      // console.error("Error fetching user:", error);
       throw error;
     }
   }
@@ -50,7 +51,7 @@ export const useUsuarioStore = defineStore("usuario", () => {
       await usuarioService.update(updatedUsuario);
       usuario.value = { ...updatedUsuario };
     } catch (error) {
-      console.error("Error updating user:", error);
+      // console.error("Error updating user:", error);
       throw error;
     }
   }
@@ -88,7 +89,7 @@ export const useUsuarioStore = defineStore("usuario", () => {
       await usuarioService.create(usuario);
       usuarios.value.push(usuario);
     } catch (error) {
-      console.error("Error adding user:", error);
+      // console.error("Error adding user:", error);
       throw error;
     }
   }

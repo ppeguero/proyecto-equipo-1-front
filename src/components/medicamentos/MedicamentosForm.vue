@@ -39,6 +39,7 @@
       <small v-if="errors.fechaVencimiento" class="p-error">{{ errors.fechaVencimiento }}</small>
     </div>
     <div class="flex flex-col gap-1">
+      <label for="stock" class="font-semibold">Stock</label>
       <InputNumber
         v-model="localMedicamento.stock"
         placeholder="Stock"
